@@ -19,11 +19,18 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// API BUILDING
+// API CURD BOOK
+// Route::resource('books', BookController::class);
+Route::get('/books', [BookController::class, 'index']);
+
+
+
 Route::get('/greeting',function(){
     return "Helloooo";
 });
 // Route::get('/foo', [BookController::class, 'foo'])->name('foo')->middleware('foo');
-Route::resource('books', BookController::class);
+// Route::resource('books', BookController::class);
 
 Route::middleware([FooCheck::class])->group(function(){
     // Route::get('/', function(){
