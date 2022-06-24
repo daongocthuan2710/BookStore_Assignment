@@ -14,11 +14,11 @@ class Book extends Model
     public $timestamps = false;
     protected $table = 'book';
    
-    public function getShortTitleAttribute():string
-    {
-        return strlen($this->book_title) > 10
-        ?substr($this->book_title,0,10)."..." : $this->book_title;
-    }
+    // public function getShortTitleAttribute():string
+    // {
+    //     return strlen($this->book_title) > 10
+    //     ?substr($this->book_title,0,10)."..." : $this->book_title;
+    // }
 
     public function author(): BelongsTo
     {
@@ -28,5 +28,17 @@ class Book extends Model
     public function category():BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function reviews(){
+        return $this->hasMany(Review::class);
+    }
+
+    public function discounts(){
+        return $this->hasMany(Discount::class);
+    }
+
+    public function order_items(){
+        return $this->hasMany(OrderItem::class);
     }
 }
