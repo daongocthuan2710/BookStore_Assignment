@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BookController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +16,17 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
+
+
+
+// Route::middleware([BookController::class])->group(function(){
+//     Route::get('/',function(){
+//         //
+//     });
+
+//     Route::get('/index',function(){
+//         //
+//     })->withoutMiddleware(BookController::class);
+// });
+
