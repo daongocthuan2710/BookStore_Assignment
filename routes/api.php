@@ -20,25 +20,38 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// API BUILDING
-// API CURD BOOK
+// API Book
 Route::resource('books', BookController::class);
+
+//API Category
+Route::resource('category', CategoryController::class);
+
+//API Order
+Route::resource('order', CategoryController::class);
+
+// API OrderItem
+Route::resource('orderItem', CategoryController::class);
+
+// API Review
+Route::resource('review', CategoryController::class);
+
+// API Discount
+Route::resource('discount', CategoryController::class);
+
 // Route::get('books/{id}', [BookController::class, 'show']);
 // Route::get('Categorys/{id}', [CategoryController::class, 'show']);
-Route::resource('Category', CategoryController::class);
-// Route::get('books', [BookController::class, 'index']);
 
-// Route::prefix('books')->group(function(){
-//     Route::name('admin.')->group(function(){
-//         Route::resource('books',BookController::class);
-//     });
-// });
+// Route::get('books', [BookController::class, 'index']);
 
 Route::resource('/books/{bookId}/reviews', BookController::class);
 
 // Route::get('/foo', [BookController::class, 'foo'])->name('foo')->middleware('foo');
 // Route::resource('books', BookController::class);
 // Route::get('/foo', [BookController::class, 'foo'])->name('foo');
+
+
+
+
 Route::middleware([FooCheck::class])->group(function(){
     // Route::get('/', function(){
     //     //
@@ -52,7 +65,11 @@ Route::middleware([FooCheck::class])->group(function(){
 
 });
 
-
+// Route::prefix('books')->group(function(){
+//     Route::name('admin.')->group(function(){
+//         Route::resource('books',BookController::class);
+//     });
+// });
 
 // Route::get('/books', [BookController::class, 'danh']);
 // Route::get('/books/{$id?}', [BookController::class, 'index']);
