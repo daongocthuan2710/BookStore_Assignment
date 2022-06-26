@@ -28,7 +28,6 @@ class BookNoteController extends Controller
      
     public function foo(Request $request){
         // dd($request->all());
-       // return "aaa";
        //         throw new ApiStatusException('Resoure not found', 404);
        // \request()->get('id');
        // return 'aaaa'.\request()->get('id');;
@@ -43,7 +42,8 @@ class BookNoteController extends Controller
        // return $this->book->getAll();
        // $query = Book::clas;
        // return Book::all();
-       $collection = new BookCollection(Book::paginate(5));
+    //    $collection = new BookCollection(Book::paginate(5));
+        return response(new BookCollection(Book::paginate(5)));
        // $collection->collection->filter()
    }
 

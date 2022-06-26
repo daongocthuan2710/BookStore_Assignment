@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories;
 use App\Models\Book;
+use GuzzleHttp\Psr7\Request;
 
 class BookRepository extends BaseRepository
 {
@@ -11,24 +12,27 @@ class BookRepository extends BaseRepository
 
     public function getById($id)
     {
+        $this->query->with(['author','category']);
         return $this->query->find($id);
     }
 
-    public function filter($conditions = [])
+    public function filter($request)
     {
-        foreach(explode(',',$conditions['with']) as $with){     
-            switch($with){
-                case 'author':
-                    $this->query->with(['author']);
-                    break;
-                case 'category':
-                    $this->query->with(['category']);
-                    break;
-                default:
-                    break;
-            }
+        if($request->category != NULL)
+        {
+            $this->query->where('author_id',$request->category);
         }
-        $this->query->where('id',2);
+        if($request->author != NULL)
+        {
+            $this->query->where('author_id',$request->author);
+        }
+        if($request->keyword != NULL){
+            $this->search($request);
+        }
+        if($request->sortBy != NULL && $request->orderBy != NULL)
+        {
+            $this->sortBy($request);
+        }
         $this->applyPagination();
         return $this->query->get();
     }
@@ -42,5 +46,18 @@ class BookRepository extends BaseRepository
     {
         ///TO DO:  Implement update() method
     }
+
+    public function search($request)
+    {
+        return $this->query->where('book_title','LIKE','%'.$request->keyword.'%');
+        
+    }
+
+    public function sortBy($request)
+    {
+            return $this->query->orderBy($request->sortBy,$request->orderBy);
+    }
+
+
 }
 ?>

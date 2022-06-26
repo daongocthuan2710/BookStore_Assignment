@@ -20,7 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// API Book
+// API Book: index, store, update, delete, search, filter
 Route::resource('books', BookController::class);
 
 //API Category
@@ -38,10 +38,6 @@ Route::resource('review', CategoryController::class);
 // API Discount
 Route::resource('discount', CategoryController::class);
 
-// Route::get('books/{id}', [BookController::class, 'show']);
-// Route::get('Categorys/{id}', [CategoryController::class, 'show']);
-
-// Route::get('books', [BookController::class, 'index']);
 
 Route::resource('/books/{bookId}/reviews', BookController::class);
 
@@ -71,22 +67,9 @@ Route::middleware([FooCheck::class])->group(function(){
 //     });
 // });
 
-// Route::get('/books', [BookController::class, 'danh']);
-// Route::get('/books/{$id?}', [BookController::class, 'index']);
-// Route::get('/book s/{id?}', [BookController::class, 'index']);
 
-// Route::get('/user/{id}/profile', function($id){
-//     //
-// })->name('profile');
 
-// $url = route('profile', ['id'=> 1, 'photos'=>'yes']);
-//user/1/profile?photos=yes
 
 
 // Route::resource('/books', BookController::class)->only('index', 'show');
 
-// Route::prefix('admin')->group(function(){
-//     Route::name('admin.')->group(function(){
-//         Route::resource('books',BookController::class);
-//     });
-// });

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Resources\CategoryCollection;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Repositories\CategoryRepository;
@@ -16,11 +17,13 @@ class CategoryController extends Controller
     {
         $this->_categoryRespository = $categoryRespository;
     }
+
     public function index(Request $request)
     {
-        return Category::all();
-        // $conditions = $request->get('filters');
-        // return response($this->_categoryRespository->filter($conditions));
+        // return Category::all();
+        // return response(new CategoryCollection(Category::paginate(5)));
+        $conditions = $request->get('filters');
+        return response($this->_categoryRespository->filter($conditions));
     }
 
     public function store(Request $request)
@@ -35,36 +38,17 @@ class CategoryController extends Controller
         // return response('Invalid Form Input', '422');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         return Category::find($id);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         // $post->update($request->all());
         // return $post;
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         //

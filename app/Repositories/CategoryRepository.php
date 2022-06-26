@@ -14,21 +14,25 @@ class CategoryRepository extends BaseRepository
 
     public function getById($id)
     {
+        
         return $this->query->find($id);
     }
 
     public function filter($conditions = [])
     {
-        // if($conditions['with'] === 'author')
-        $conditions['with'] = explode($conditions['with'], ',');
-        if($conditions['with'].contains('author'))
-        {   
-            // $this->query->with('author');
-            // $this->query->join(Category::getTableName());
-
+        foreach(explode(',',$conditions['with']) as $with){
+            switch($with){
+                case 'author':
+                    $this->query->with($with);
+                    break;
+                case 'category':
+                    $this->query->with($with);
+                    break;
+                default:
+                    break;
+            }
         }
         return $this->query->where('id',2)->get();
-        ///TO DO:  Implement filter() method
     }
 
     public function create($data)
