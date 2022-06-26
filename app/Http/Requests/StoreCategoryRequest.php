@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreBookRequest extends FormRequest
+class StoreCategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,7 @@ class StoreBookRequest extends FormRequest
     public function rules()
     {
         return [
-            'book_title' => 'required',
-            //custom rule to check id exist in category table
-            // 'category_id' => ['required', new AvailableCategory]
+            'category_name' => 'required'
         ];
     }
 }

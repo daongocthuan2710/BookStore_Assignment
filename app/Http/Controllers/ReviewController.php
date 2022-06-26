@@ -1,23 +1,19 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Book;
+
 use Illuminate\Http\Request;
-use App\Repositories\BookRepository;
 
-class BookController extends Controller
+class ReviewController extends Controller
 {
-    private BookRepository $_BookRespository;
-
-    public function __construct(BookRepository $BookRespository )
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
     {
-        $this->_BookRespository = $BookRespository;
-    }
-
-    public function index(Request $request)
-    {
-        $conditions = $request->get('filters');
-        return response($this->_BookRespository->filter($conditions));
+        //
     }
 
     /**
@@ -28,7 +24,7 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-
+        //
     }
 
     /**
@@ -39,7 +35,7 @@ class BookController extends Controller
      */
     public function show($id)
     {
-       return Book::find($id);
+        //
     }
 
     /**

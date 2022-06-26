@@ -9,9 +9,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Book extends Model
 {
-    use HasFactory, SoftDeletes;
-
-    public $timestamps = false;
+    use HasFactory; //, SoftDeletes
+    // protected $filltable = [
+    //     'book_id'
+    // ];
+    public $timestamps =false;
     protected $table = 'book';
    
     // public function getShortTitleAttribute():string

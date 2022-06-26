@@ -16,12 +16,12 @@ class BookCollection extends ResourceCollection
     {
         // return parent::toArray($request);
 
-        return [
-            'data' => $this->collection,
-            'id' =>$this->id,
-            'link' => [
-                'self' =>'link-value'
-            ]
-        ];
+        // return [
+        //     'data' => $this->collection,
+        //     'id' =>$this->id,
+        //     'link' => [
+        //         'self' =>'link-value'
+        //     ]
+        // ];
     }
 }

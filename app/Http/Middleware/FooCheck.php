@@ -16,7 +16,7 @@ class FooCheck
      */
     public function handle(Request $request, Closure $next)
     {
-        // dd($request->    input('token'));
+        dd($request->input('token'));
         if($request->input('token') !== '123'){
             return redirect()->route('home');
         }

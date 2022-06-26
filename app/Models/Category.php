@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     use HasFactory;
-    //protected $fillable = ['category_name'];
+    // protected $fillable = ['category_name'];
 
     public $timestamps = false;
 
@@ -16,5 +16,10 @@ class Category extends Model
 
     public function books(){
         return $this->hasMany(Book::class);
+    }
+
+    public function getTableName()
+    {
+        return 'category';
     }
 }
