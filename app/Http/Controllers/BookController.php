@@ -18,9 +18,6 @@ class BookController extends Controller
 
     public function index(Request $request)
     {
-
-        // // return response(new BookCollection(Book::paginate(10)));
-        // $conditions = $request->get('filters');
         return response($this->_BookRespository->filter($request));
     }
 

@@ -4,8 +4,8 @@ namespace App\Repositories;
 abstract class BaseRepository
 {
     protected $query;
-    public function applyPagination(){
-        $this->query->paginate();
+    public function applyPagination($perPage){
+        $this->query->paginate($perPage);
     }
     public abstract function getById($id);
     public abstract function filter($conditions);

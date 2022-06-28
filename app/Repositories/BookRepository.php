@@ -20,7 +20,7 @@ class BookRepository extends BaseRepository
     {
         if($request->category != NULL)
         {
-            $this->query->where('author_id',$request->category);
+            $this->query->where('category_id',$request->category);
         }
         if($request->author != NULL)
         {
@@ -29,11 +29,11 @@ class BookRepository extends BaseRepository
         if($request->keyword != NULL){
             $this->search($request);
         }
-        if($request->sortBy != NULL && $request->orderBy != NULL)
+        if($request->sortBy != NULL)
         {
             $this->sortBy($request);
         }
-        $this->applyPagination();
+        $this->applyPagination($request->perPage);
         return $this->query->get();
     }
 
@@ -55,9 +55,31 @@ class BookRepository extends BaseRepository
 
     public function sortBy($request)
     {
-            return $this->query->orderBy($request->sortBy,$request->orderBy);
+        
+        switch($request->sortBy){
+            case 'lowToHigh': 
+                return $this->query->orderBy('book_price','asc');
+                break;
+            case 'highToLow':
+                return $this->query->orderBy('book_price','desc'); 
+                break;
+            case 'onSale':
+                return $this->query->leftJoin('discount', function($join){
+                    $join->on('book.id', '=', 'discount.book_id');
+                    })
+                    ->orderByRaw(
+                        "CASE WHEN discount.discount_price is not null and(discount.discount_end_date > CURRENT_DATE 
+                        or discount.discount_end_date is null) THEN discount_price END DESC NULLS LAST,
+                        CASE WHEN discount.discount_price is NULL or discount.discount_end_date < CURRENT_DATE THEN book.book_price END asc"
+                    );
+                break;
+            case 'popularity':
+                //
+                break;
+            default:
+                break;
+        }
     }
-
 
 }
 ?>
