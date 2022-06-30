@@ -5,21 +5,24 @@ namespace App\Http\Controllers;
 use App\Http\Resources\BookCollection;
 use App\Models\Book;
 use Illuminate\Http\Request;
-use App\Repositories\BookRepository;
+use App\Services\BookService;
 
 class BookController extends Controller
 {
-    private BookRepository $_BookRespository;
+    private BookService $_BookService;
 
-    public function __construct(BookRepository $BookRespository )
+    public function __construct(BookService $BookService )
     {
-        $this->_BookRespository = $BookRespository;
+        $this->_BookService = $BookService;
     }
 
     public function index(Request $request)
     {
-        return response($this->_BookRespository->filter($request));
-    }
+        // $this->_BookService->filter($request);
+        // $this->_BookService->sortBy($request);
+        // return response($this->_BookService->filter($request));
+        return response($this->_BookService->sortBy($request));
+    }   
 
 
     public function store(Request $request)

@@ -24,12 +24,12 @@ class Book extends Model
 
     public function author(): BelongsTo
     {
-        return $this->belongsTo(Author::class);
+        return $this->belongsTo(Author::class,'foreign_key');
     }
 
     public function category():BelongsTo
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class,'foreign_key');
     }
 
     public function reviews(){

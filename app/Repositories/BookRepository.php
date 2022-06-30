@@ -1,7 +1,6 @@
 <?php
 namespace App\Repositories;
 use App\Models\Book;
-use GuzzleHttp\Psr7\Request;
 
 class BookRepository extends BaseRepository
 {
@@ -16,25 +15,35 @@ class BookRepository extends BaseRepository
         return $this->query->find($id);
     }
 
-    public function filter($request)
+    public function filter($conditions)
     {
-        if($request->category != NULL)
-        {
-            $this->query->where('category_id',$request->category);
+        try {
+            if ($conditions['filterCategory'] != [""]) {
+                $this->query->whereIn('category_id',[1])
+                ->orderBy('book_title', 'ASC');
+            }
+
+            if ($conditions['filterAuthor'] != [""]) {
+                $this->query->whereIn('author_id', $conditions['filterAuthor'])
+                ->orderBy('book_title', 'ASC');
+            }
+
+            if ($conditions->rating_star != null) {
+                return $this->query
+                ->select(Book::raw('book.id, book_price, book_title, avg(review.rating_start) as avr_review'))
+                ->leftJoin('review', function ($join) {
+                    $join->on('book.id', '=', 'review.book_id');
+                })
+                ->groupBy('book.id', 'book_price', 'book_title')
+                ->having('avr_review', '>', $conditions->rating_star)
+                ->orderBy('avr_review', 'ASC');
+            }
+            $this->applyPagination($conditions['perPage']);
+            return $this->query->get();
+
+        } catch (\Exception $e){
+            return "Filter Fail";
         }
-        if($request->author != NULL)
-        {
-            $this->query->where('author_id',$request->author);
-        }
-        if($request->keyword != NULL){
-            $this->search($request);
-        }
-        if($request->sortBy != NULL)
-        {
-            $this->sortBy($request);
-        }
-        $this->applyPagination($request->perPage);
-        return $this->query->get();
     }
 
     public function create($data)
@@ -47,37 +56,68 @@ class BookRepository extends BaseRepository
         ///TO DO:  Implement update() method
     }
 
-    public function search($request)
+    public function search($condition)
     {
-        return $this->query->where('book_title','LIKE','%'.$request->keyword.'%');
+        // try{
+        //     dd($condition->keyWord);
+        //     if($condition->keyWord != NULL){
+        //         return $this->query->where('book_title','LIKE','%'.$condition->keyWord.'%');
+        //     }
+        // } catch (\Exception $e){
+        //     return "Search Fail";
+        // }
+
+        dd($condition->keyWord);
+        if($condition->keyWord != NULL){
+            return $this->query->where('book_title','LIKE','%'.$condition->keyWord.'%');
+        }
         
     }
 
-    public function sortBy($request)
+    public function sortBy($condition)
     {
-        
-        switch($request->sortBy){
+    
+        switch($condition){
             case 'lowToHigh': 
-                return $this->query->orderBy('book_price','asc');
+                return $this->query
+                ->select(Book::raw('book.id,coalesce(discount_price,book_price) as final_price'))
+                ->groupBy('book.id')
+                ->orderBy('final_price','asc');
                 break;
             case 'highToLow':
-                return $this->query->orderBy('book_price','desc'); 
+                return $this->query
+                ->select(Book::raw('book.id,coalesce(discount_price,book_price) as final_price'))
+                ->groupBy('book.id')
+                ->orderBy('final_price','desc');
                 break;
             case 'onSale':
-                return $this->query->leftJoin('discount', function($join){
+                return $this->query
+                ->select(Book::raw('book.id,book_title,book_price,discount_price,discount_end_date,(book_price - coalesce(discount_price,book_price))'))
+                ->leftJoin('discount', function($join){
                     $join->on('book.id', '=', 'discount.book_id');
                     })
+                    ->groupBy('book.id','discount_price','discount_end_date')
                     ->orderByRaw(
-                        "CASE WHEN discount.discount_price is not null and(discount.discount_end_date > CURRENT_DATE 
-                        or discount.discount_end_date is null) THEN discount_price END DESC NULLS LAST,
-                        CASE WHEN discount.discount_price is NULL or discount.discount_end_date < CURRENT_DATE THEN book.book_price END asc"
+                        "CASE WHEN (book_price - coalesce(discount_price,book_price)) > 0 and(discount_end_date >= CURRENT_DATE 
+                            or discount_end_date is null) THEN (book_price - coalesce(discount_price,book_price)) END desc nulls last,
+                        CASE WHEN discount_price is NULL or discount_end_date < CURRENT_DATE THEN book_price END asc;"
                     );
                 break;
             case 'popularity':
-                //
+                return $this->query
+                    ->select(Book::raw('book.id,book.book_title,count(review.id) as reviews,(book_price - coalesce(discount_price,0)) as final_price'))
+                    ->leftJoin('review', function($join){
+                        $join->on('book.id', '=', 'review.book_id');
+                        })
+                    ->leftJoin('discount', function($join){
+                        $join->on('book.id', '=', 'discount.book_id');
+                        })
+                    ->groupBy('book.id','discount_price')
+                    ->orderBy('reviews', 'desc')
+                    ->orderBy('final_price', 'asc');
                 break;
-            default:
-                break;
+                default:
+                    break;
         }
     }
 
