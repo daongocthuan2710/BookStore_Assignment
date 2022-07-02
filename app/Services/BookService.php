@@ -14,7 +14,6 @@ class BookService extends BaseService
     public function index($request){
 
         $perPage = $request->perPage ?? 15;  
-
         if ($request->category_id != null or $request->author_id != null or $request->ratingStarValue != null){
             return $this->filter($request,$perPage);
         }
@@ -27,8 +26,7 @@ class BookService extends BaseService
         else if($request->book_id != null){
             return $this->getById($request->book_id,$perPage);
         }
-        else return $this->getAll($request,$perPage);
-        
+        else return $this->getAll($perPage);
     }
 
     public function filter($request,$perPage)

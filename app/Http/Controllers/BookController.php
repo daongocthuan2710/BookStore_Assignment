@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\BookCollection;
-use App\Models\Book;
 use Illuminate\Http\Request;
 use App\Services\BookService;
 
@@ -29,10 +27,15 @@ class BookController extends Controller
 
     public function show($id)
     {
-        return response($this->_BookRespository->getById($id));
+        return $id;
     }
 
- 
+    public function showReviews($id)
+    {
+        return $id;
+        // return response($this->_BookBookService->getById($id));
+    }
+
     public function update(Request $request, $id)
     {
         //

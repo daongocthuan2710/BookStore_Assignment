@@ -1,6 +1,10 @@
 <?php
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DiscountController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderItemController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Middleware\FooCheck;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,22 +28,25 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::resource('books', BookController::class);
 
 //API Category
-Route::resource('category', CategoryController::class);
+Route::resource('categorys', CategoryController::class);
 
 //API Order
-Route::resource('order', CategoryController::class);
+Route::resource('orders', OrderController::class);
 
 // API OrderItem
-Route::resource('orderItem', CategoryController::class);
+Route::resource('orderItems', OrderItemController::class);
 
 // API Review
-Route::resource('review', CategoryController::class);
+Route::resource('reviews', ReviewController::class);
 
 // API Discount
-Route::resource('discount', CategoryController::class);
+Route::resource('discounts', DiscountController::class);
 
 
-Route::resource('/books/{bookId}/reviews', BookController::class);
+// Route::get('/books/{bookId}/reviews', [BookController::class, 'showReviews']);
+
+
+
 
 // Route::get('/foo', [BookController::class, 'foo'])->name('foo')->middleware('foo');
 // Route::resource('books', BookController::class);
@@ -48,18 +55,18 @@ Route::resource('/books/{bookId}/reviews', BookController::class);
 
 
 
-Route::middleware([FooCheck::class])->group(function(){
-    // Route::get('/', function(){
-    //     //
-    // });
-    Route::get('/foo', [BookController::class, 'foo'])->name('foo');
+// Route::middleware([FooCheck::class])->group(function(){
+//     // Route::get('/', function(){
+//     //     //
+//     // });
+//     Route::get('/foo', [BookController::class, 'foo'])->name('foo');
 
-    Route::get('/profile', function(){
-        //
-    })->withoutMiddleware([FooCheck::class]);
+//     Route::get('/profile', function(){
+//         //
+//     })->withoutMiddleware([FooCheck::class]);
 
 
-});
+// });
 
 // Route::prefix('books')->group(function(){
 //     Route::name('admin.')->group(function(){

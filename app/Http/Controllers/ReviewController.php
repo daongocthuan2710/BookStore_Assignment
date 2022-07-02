@@ -14,7 +14,7 @@ class ReviewController extends Controller
         $this->_ReviewService = $ReviewService;
     }
 
-    public function index($request)
+    public function index(Request $request)
     {
         return response($this->_ReviewService->index($request));
     }
