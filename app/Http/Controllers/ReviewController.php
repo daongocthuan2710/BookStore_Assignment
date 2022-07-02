@@ -14,10 +14,9 @@ class ReviewController extends Controller
         $this->_ReviewService = $ReviewService;
     }
 
-    public function index()
+    public function index($request)
     {
-        $PER_PAGE = 10 ;
-        return response($this->_ReviewService->index($PER_PAGE));
+        return response($this->_ReviewService->index($request));
     }
 
 

@@ -3,8 +3,7 @@ namespace App\Services;
 
 use App\Repositories\AuthorRepository;
 
-class AuthorService
-{
+class AuthorServie{
     private AuthorRepository $_AuthorRepository;
 
     public function __construct(AuthorRepository $AuthorRepository){

@@ -3,7 +3,7 @@ namespace App\Services;
 
 use App\Repositories\DiscountRepository;
 
-class DiscountService
+class DiscountService 
 {
     private DiscountRepository $_DiscountRepository;
 

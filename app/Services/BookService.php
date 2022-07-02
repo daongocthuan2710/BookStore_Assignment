@@ -3,7 +3,7 @@ namespace App\Services;
 
 use App\Repositories\BookRepository;
 
-class BookService
+class BookService extends BaseService
 {
     private BookRepository $_BookRepository;
 
@@ -11,30 +11,68 @@ class BookService
         $this->_BookRepository = $BookRepository;
     }
 
-    public function filter($request)
+    public function index($request){
+
+        $perPage = $request->perPage ?? 15;  
+
+        if ($request->category_id != null or $request->author_id != null or $request->ratingStarValue != null){
+            return $this->filter($request,$perPage);
+        }
+        else if($request->sortBy != null){
+            return $this->sortBy($request,$perPage);
+        }
+        else if($request->getTopBooks != null){
+            return $this->getTopBooks($request,$perPage);
+        }
+        else if($request->book_id != null){
+            return $this->getById($request->book_id,$perPage);
+        }
+        else return $this->getAll($request,$perPage);
+        
+    }
+
+    public function filter($request,$perPage)
     {
        $conditions = [
             'filterCategory' => explode(',',$request->category_id),
             'filterAuthor' => explode(',',$request->author_id),
             'filterRatingStar' => explode(',',$request->ratingStarValue),
-            'perPage' =>$request->perPage
         ];
-        return $this->_BookRepository->filter($conditions);
+        return $this->_BookRepository->filter($conditions,$perPage);
     }
 
-    public function sortBy($request)
+    public function sortBy($request,$perPage)
     {
         $condition = $request->sortBy;
 
-        return $this->_BookRepository->sortBy($condition);
+        return $this->_BookRepository->sortBy($condition,$perPage);
     }
     
     public function search($request)
     {
         $condition = $request->keyWord;
-        dd( $request->keyWord);
-        // return $this->_BookRepository->search($request);
-        
+        return $this->_BookRepository->search($request);
+    }
+
+    public function getAll($perPage){
+        return $this->_BookRepository->getAll($perPage);
+    }
+
+    public function getById($request){
+        return $this->_BookRepository->getById($request);
+    }
+
+    public function getTopBooks($request,$perPage){
+        $numberOfBooks = $request->getTopBooks;
+        return $this->_BookRepository->getTopBooks($numberOfBooks,$perPage);
+    }
+
+    public function create($data)
+    {
+        //
+    }
+    public function update($data){
+        //
     }
 }
 

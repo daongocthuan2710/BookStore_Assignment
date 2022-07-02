@@ -3,7 +3,7 @@ namespace App\Services;
 
 use App\Repositories\CategoryRepository;
 
-class CategoryService
+class CategoryService 
 {
     private CategoryRepository $_CategoryRepository;
 

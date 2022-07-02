@@ -3,7 +3,7 @@ namespace App\Services;
 
 use App\Repositories\OrderRepository;
 
-class OrderService
+class OrderService 
 {
     private OrderRepository $_OrderRepository;
 

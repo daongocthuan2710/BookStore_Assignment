@@ -9,17 +9,24 @@ class BookRepository extends BaseRepository
         $this->query = Book::query();
     }
 
+    public function getAll($perPage){
+        $this->query->get();
+        $this->applyPagination($perPage);
+        return $this->query->get();
+    }
+
     public function getById($id)
     {
         $this->query->with(['author','category']);
         return $this->query->find($id);
     }
 
-    public function filter($conditions)
+    public function filter($conditions,$perPage)
     {
         try {
             if ($conditions['filterCategory'] != [""]) {
-                $this->query->whereIn('category_id',[1])
+
+                $this->query->whereIn('category_id',$conditions['filterCategory'])
                 ->orderBy('book_title', 'ASC');
             }
 
@@ -28,17 +35,17 @@ class BookRepository extends BaseRepository
                 ->orderBy('book_title', 'ASC');
             }
 
-            if ($conditions->rating_star != null) {
-                return $this->query
-                ->select(Book::raw('book.id, book_price, book_title, avg(review.rating_start) as avr_review'))
+            if ($conditions['filterRatingStar'] != [""]) {
+                $this->query->selectRaw('book.id, book_price, book_title, avg(review.rating_start) as avgRating')
                 ->leftJoin('review', function ($join) {
                     $join->on('book.id', '=', 'review.book_id');
                 })
                 ->groupBy('book.id', 'book_price', 'book_title')
-                ->having('avr_review', '>', $conditions->rating_star)
-                ->orderBy('avr_review', 'ASC');
+                ->havingRaw('avg(review.rating_start) > 2.0')
+                ->orderByRaw('avgRating DESC NULLS LAST');
             }
-            $this->applyPagination($conditions['perPage']);
+
+            $this->applyPagination($perPage);
             return $this->query->get();
 
         } catch (\Exception $e){
@@ -74,25 +81,34 @@ class BookRepository extends BaseRepository
         
     }
 
-    public function sortBy($condition)
+    public function sortBy($condition,$perPage)
     {
-    
         switch($condition){
             case 'lowToHigh': 
-                return $this->query
-                ->select(Book::raw('book.id,coalesce(discount_price,book_price) as final_price'))
-                ->groupBy('book.id')
+                $this->query
+                ->selectRaw('book.id,book_price,discount_price,discount_end_date,
+                            (case when (discount_end_date >= CURRENT_DATE or discount_end_date is null) 
+                            THEN coalesce(discount_price,book_price) 
+                            ELSE book_price END) as final_price')
+                ->leftJoin('discount', function($join){
+                    $join->on('book.id', '=', 'discount.book_id');
+                    })
                 ->orderBy('final_price','asc');
                 break;
             case 'highToLow':
-                return $this->query
-                ->select(Book::raw('book.id,coalesce(discount_price,book_price) as final_price'))
-                ->groupBy('book.id')
+                $this->query
+                ->selectRaw('book.id,book_price,discount_price,discount_end_date,
+                            (case when (discount_end_date >= CURRENT_DATE or discount_end_date is null) 
+                            THEN coalesce(discount_price,book_price) 
+                            ELSE book_price END) as final_price')
+                ->leftJoin('discount', function($join){
+                    $join->on('book.id', '=', 'discount.book_id');
+                    })
                 ->orderBy('final_price','desc');
                 break;
             case 'onSale':
-                return $this->query
-                ->select(Book::raw('book.id,book_title,book_price,discount_price,discount_end_date,(book_price - coalesce(discount_price,book_price))'))
+                $this->query
+                ->selectRaw('book.id,book_title,book_price,discount_price,discount_end_date,(book_price - coalesce(discount_price,book_price)) as onSale')
                 ->leftJoin('discount', function($join){
                     $join->on('book.id', '=', 'discount.book_id');
                     })
@@ -104,14 +120,14 @@ class BookRepository extends BaseRepository
                     );
                 break;
             case 'popularity':
-                return $this->query
-                    ->select(Book::raw('book.id,book.book_title,count(review.id) as reviews,(book_price - coalesce(discount_price,0)) as final_price'))
+                $this->query
+                    ->selectRaw('book.id,book.book_title,count(review.id) as reviews,(book_price - coalesce(discount_price,0)) as final_price')
                     ->leftJoin('review', function($join){
                         $join->on('book.id', '=', 'review.book_id');
-                        })
+                        })      
                     ->leftJoin('discount', function($join){
                         $join->on('book.id', '=', 'discount.book_id');
-                        })
+                        })  
                     ->groupBy('book.id','discount_price')
                     ->orderBy('reviews', 'desc')
                     ->orderBy('final_price', 'asc');
@@ -119,7 +135,25 @@ class BookRepository extends BaseRepository
                 default:
                     break;
         }
+        $this->applyPagination($perPage);
+        return $this->query->get();
     }
 
+    function getTopBooks($numberOfBooks,$perPage){
+        $this->query
+        ->selectRaw('book.id,book_title,book_price,discount_price,discount_end_date,(book_price - coalesce(discount_price,book_price)) as onSale')
+        ->leftJoin('discount', function($join){
+            $join->on('book.id', '=', 'discount.book_id');
+            })
+        ->groupBy('book.id','discount_price','discount_end_date')
+        ->orderByRaw(
+                "CASE WHEN (book_price - coalesce(discount_price,book_price)) > 0 and(discount_end_date >= CURRENT_DATE 
+                    or discount_end_date is null) THEN (book_price - coalesce(discount_price,book_price)) END desc nulls last,
+                CASE WHEN discount_price is NULL or discount_end_date < CURRENT_DATE THEN book_price END asc"
+            )
+        ->limit($numberOfBooks);
+        $this->applyPagination($perPage);
+        return $this->query->get();
+    }
 }
 ?>

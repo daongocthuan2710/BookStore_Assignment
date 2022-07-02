@@ -18,10 +18,7 @@ class BookController extends Controller
 
     public function index(Request $request)
     {
-        // $this->_BookService->filter($request);
-        // $this->_BookService->sortBy($request);
-        // return response($this->_BookService->filter($request));
-        return response($this->_BookService->sortBy($request));
+        return response($this->_BookService->index($request));
     }   
 
 
@@ -29,7 +26,6 @@ class BookController extends Controller
     {
 
     }
-
 
     public function show($id)
     {

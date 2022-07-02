@@ -3,7 +3,7 @@ namespace App\Services;
 
 use App\Repositories\ReviewRepository;
 
-class ReviewService
+class ReviewService extends BaseService
 {
     private ReviewRepository $_ReviewRepository;
 
@@ -11,16 +11,37 @@ class ReviewService
         $this->_ReviewRepository = $ReviewRepository;
     }
 
-    public function index($perPage)
+    public function index($request)
     {
+        $perPage = $request->perPage ?? 5; 
         $this->_ReviewRepository->applyPagination($perPage);
     }
 
-    public function sortBy($request)
+    public function getAll($perPage){
+        return $this->_BookRepository->getAll($perPage);
+    }
+
+    public function sortBy($request,$perPage)
     {
 
     }
     
+    public function getById($id)
+    {
+
+    }
+    public function filter($conditions,$perPage)
+    {
+
+    }
+    public function create($data)
+    {
+
+    }
+    public function update($data)
+    {
+
+    }
 }
 
 ?>
