@@ -38,6 +38,39 @@ class ReviewRepository extends BaseRepository
     {
     
     }
+    
+    public function sortBy($condition,$book_id,$perPage)
+    {
+        try{
+            switch($condition){
+                case 'newestToOldest': 
+                    $this->query
+                    ->selectRaw('book_title,book_price,rating_start, review_title, review_date ')
+                    ->rightJoin('book', function($join){
+                        $join->on('book.id', '=', 'review.book_id');
+                        })
+                        ->where('book.id' , $book_id)
+                    ->orderByRaw('review_date desc nulls last'); 
+                    break;
+                case 'oldestToNewest':
+                        $this->query
+                        ->selectRaw('book_title,book_price,rating_start, review_title, review_date ')
+                        ->rightJoin('book', function($join){
+                            $join->on('book.id', '=', 'review.book_id');
+                            })
+                            ->where('book.id' , $book_id)
+                        ->orderByRaw('review_date asc nulls last'); 
+                        break;
+                    default:
+                        break;
+            }
+            $this->applyPagination(256);
+            return $this->query->get();
+
+        } catch (\Exception $e){
+            return "Sort Fail";
+        }
+    }
 
     public function create($data)
     {

@@ -14,27 +14,32 @@ class ReviewService extends BaseService
     public function index($request)
     {
         $perPage = $request->perPage ?? 5;  
+        $datas = [];
         if($request->all() == [])
         {
-            return $this->getAll($perPage);
+            $datas = $this->getAll($perPage);
         }
-        if($request->book_id != null){
-            return $this->getByBookId($request->book_id,$perPage);
-        }
+        // if($request->book_id != null){
+        //     $datas = $this->getByBookId($request->book_id,$perPage);
+        // }
         if($request->sortBy != null){
-            return $this->sortBy($request->sortBy,$perPage);
+            $datas = $this->sortByBookId($request->sortBy,$request->book_id,$perPage);
         }
-
-        
+        return $datas;
     }
 
     public function getAll($perPage){
         return $this->_ReviewRepository->getAll($perPage);
     }
 
-    public function sortBy($request,$perPage)
+    public function sortBy($condition,$perPage)
     {
+        // return $this->_ReviewRepository->sortBy($condition,$perPage);
+    }
 
+    public function sortByBookId($condition,$book_id,$perPage)
+    {
+        return $this->_ReviewRepository->sortBy($condition,$book_id,$perPage);
     }
     
     public function getById($id)
