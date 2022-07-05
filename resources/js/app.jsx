@@ -5,8 +5,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Welcome from './welcome';
 import Header from './Components/Header/Header';
 import HomePage from './Components/homePage/homePage';
-// import {Example} from './Components./homePage/featuredBooksGrid'
-
+import ShopPage from './Components/ShopPage/shopPage';
+import '../css/app.scss';
 
 ReactDOM.render(
     <HashRouter>
@@ -14,7 +14,7 @@ ReactDOM.render(
         <Routes>
             <Route path="/" element={<Welcome/>}></Route>
             <Route path="/homePage" element={<HomePage/>}></Route>
-            <Route path="/shopPage" element={<Welcome/>}></Route>
+            <Route path="/shopPage" element={<ShopPage/>}></Route>
             <Route path="/cartPage" element={<Welcome/>}></Route>
             <Route path="/productPage" element={<Welcome/>}></Route>
             <Route path="/aboutPage" element={<Welcome/>}></Route>
@@ -22,7 +22,6 @@ ReactDOM.render(
 
         </Routes> 
     </HashRouter>
-
   ,document.getElementById('root')
 );
 

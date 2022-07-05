@@ -29,9 +29,8 @@ function ControlledCarousel() {
 
     return (
         <Swiper
-            className="mySwiper border border-primary pr-8 mt-2"
+            className="border border-black mt-2"
             modules={[Navigation, Pagination, Autoplay]}
-            centeredSlides={true}
             spaceBetween={-60}
             slidesPerView={4}
             navigation
@@ -41,61 +40,80 @@ function ControlledCarousel() {
                 disableOnInteraction: false,
             }}
         >
-            {books.map((book) => (
-                <SwiperSlide
-                    key={book.id}
-                    style={{ width: "18rem" }}
-                    className="my-5 px-5"
-                >
-                    <Card>
-                        <Link
-                            to="/productPage"
-                            params={{ book_id: book.id }}
-                            class="nav-link"
-                        >
-                            <Card.Img
-                                style={{ height: "20rem" }}
-                                variant="top"
-                                src={bookCover[book.book_cover_photo]}
-                            />
-                        </Link>
-                        <Card.Body>
-                            <Card.Title className="text-truncate" s>
-                                {book.book_title}
-                            </Card.Title>
-                            <Card.Text>{book.author_name}</Card.Text>
-                            <Card.Text className="bg-aqua card-footer bg-transparent">
-                                {(() => {
-                                    if (book.discount_price != null) {
-                                        return (
-                                            <Container>
-                                                <Row>
-                                                    <Col>
-                                                        {" "}
-                                                        <Card.Text className="text-decoration-line-through fs-6">
-                                                            {book.book_price} $
-                                                        </Card.Text>
-                                                        <Card.Text className="fs-6">
-                                                            {
-                                                                book.discount_price
-                                                            }{" "}
-                                                            $
-                                                        </Card.Text>
-                                                    </Col>
-                                                </Row>
-                                            </Container>
-                                        );
-                                    } else {
+            <Row>
+                <Col md={1}></Col>
+                <Col md={10}>
+                    {books.map((book) => (
+                        <Container>
+                            <SwiperSlide
+                                key={book.id}
+                               
+                                className="my-5 px-5 col-4"
+                            >
+                                <Card>
+                                    <Link
+                                        to="/productPage"
+                                        params={{ book_id: book.id }}
+                                        className="nav-link"
+                                    >
+                                        <Card.Img
+                                            style={{ height: "20rem" }}
+                                            variant="top"
+                                            src={
+                                                bookCover[book.book_cover_photo]
+                                            }
+                                        />
+                                    </Link>
+                                    <Card.Body>
+                                        <Card.Title className="text-truncate" s>
+                                            {book.book_title}
+                                        </Card.Title>
                                         <Card.Text>
-                                            {book.book_price}$
-                                        </Card.Text>;
-                                    }
-                                })()}
-                            </Card.Text>
-                        </Card.Body>
-                    </Card>
-                </SwiperSlide>
-            ))}
+                                            {book.author_name}
+                                        </Card.Text>
+                                        <Card.Text className="bg-aqua card-footer bg-transparent">
+                                            {(() => {
+                                                if (
+                                                    book.discount_price != null
+                                                ) {
+                                                    return (
+                                                        <Container>
+                                                            <Row>
+                                                                <Col>
+                                                                    {" "}
+                                                                    <Card.Text className="text-decoration-line-through fs-6">
+                                                                        {
+                                                                            book.book_price
+                                                                        }{" "}
+                                                                        $
+                                                                    </Card.Text>
+                                                                </Col>
+                                                                <Col>
+                                                                    <Card.Text className="fs-5">
+                                                                        {
+                                                                            book.discount_price
+                                                                        }{" "}
+                                                                        $
+                                                                    </Card.Text>
+                                                                </Col>
+                                                            </Row>
+                                                        </Container>
+                                                    );
+                                                } else {
+                                                    <Card.Text>
+                                                        {book.book_price}$
+                                                    </Card.Text>;
+                                                }
+                                            })()}
+                                        </Card.Text>
+                                    </Card.Body>
+                                </Card>
+                            </SwiperSlide>
+                        </Container>
+                    ))}
+                </Col>
+                <Col md={1}></Col>
+            </Row>
         </Swiper>
     );
 }

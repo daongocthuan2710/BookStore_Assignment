@@ -21,12 +21,16 @@ class BookService extends BaseService
             return $this->sortBy($request,$perPage);
         }
         else if($request->getTopBooks != null){
-            return $this->getTopBooks($request->getTopBooks,$request->getTopBooks);
+            return $this->getTopBooks($request->getTopBooks);
         }
         else if($request->book_id != null){
             return $this->getById($request->book_id,$perPage);
         }
+        else if($request->getBookRecommended != null){
+            return $this->getBookRecommendeds($request->getBookRecommended);
+        }
         else return $this->getAll($perPage);
+        // getAllPaginate
     }
 
     public function filter($request,$perPage)
@@ -60,10 +64,13 @@ class BookService extends BaseService
         return $this->_BookRepository->getById($request);
     }
 
-    public function getTopBooks($numberOfBooks,$perPage){
-        return $this->_BookRepository->getTopBooks($numberOfBooks,$perPage);
+    public function getTopBooks($numberOfBooks){
+        return $this->_BookRepository->getTopBooks($numberOfBooks);
     }
-
+    
+    public function getBookRecommendeds($numberOfBooks){
+        return $this->_BookRepository->getBookRecommendeds($numberOfBooks);
+    }
     public function create($data)
     {
         //

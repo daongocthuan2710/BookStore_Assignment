@@ -9,7 +9,7 @@ function NavbarComp() {
             <Container>
                 
                 <Navbar.Brand>
-                    <Link to="/shopPage" class="nav-link">
+                    <Link to="/shopPage" className="nav-link">
                     <img className="img-responsive" src={LogoApp} alt="logo"/>
                     </Link>
                 </Navbar.Brand>
@@ -18,17 +18,17 @@ function NavbarComp() {
 
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="ms-auto">
-                        <Link to="/homePage" class="nav-link">Home</Link>
-                        <Link to="/shopPage" class="nav-link">Shop</Link>
-                        <Link to= "/aboutPage" class="nav-link">About</Link>
-                        <Link to= "/cartPage" class="nav-link">Cart</Link>
+                        <Link to="/homePage" className="nav-link">Home</Link>
+                        <Link to="/shopPage" className="nav-link">Shop</Link>
+                        <Link to= "/aboutPage" className="nav-link">About</Link>
+                        <Link to= "/cartPage" className="nav-link">Cart</Link>
 
                         <NavDropdown title="Sign in" id="collasible-nav-dropdown">
                             <NavDropdown.Item>
-                                <Link to= "/cartPage" class="nav-link ">Sign in</Link>
+                                <Link to= "/cartPage" className="nav-link ">Sign in</Link>
                             </NavDropdown.Item>
                             <NavDropdown.Item>
-                                <Link to= "/cartPage" class="nav-link ">Register</Link>
+                                <Link to= "/cartPage" className="nav-link ">Register</Link>
                             </NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
