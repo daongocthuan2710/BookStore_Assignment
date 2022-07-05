@@ -21,7 +21,7 @@ class BookService extends BaseService
             return $this->sortBy($request,$perPage);
         }
         else if($request->getTopBooks != null){
-            return $this->getTopBooks($request,$perPage);
+            return $this->getTopBooks($request->getTopBooks,$request->getTopBooks);
         }
         else if($request->book_id != null){
             return $this->getById($request->book_id,$perPage);
@@ -60,8 +60,7 @@ class BookService extends BaseService
         return $this->_BookRepository->getById($request);
     }
 
-    public function getTopBooks($request,$perPage){
-        $numberOfBooks = $request->getTopBooks;
+    public function getTopBooks($numberOfBooks,$perPage){
         return $this->_BookRepository->getTopBooks($numberOfBooks,$perPage);
     }
 

@@ -146,19 +146,22 @@ class BookRepository extends BaseRepository
 
     function getTopBooks($numberOfBooks,$perPage){
         $this->query
-        ->selectRaw('book.id,book_title,book_price,discount_price,discount_end_date,(book_price - coalesce(discount_price,book_price)) as onSale')
+        ->selectRaw('book.id,book_title,book_price,book_cover_photo,author_name,discount_price,discount_end_date,(book_price - coalesce(discount_price,book_price)) as onSale')
         ->leftJoin('discount', function($join){
             $join->on('book.id', '=', 'discount.book_id');
             })
-        ->groupBy('book.id','discount_price','discount_end_date')
+        ->leftJoin('author', function($join){
+            $join->on('book.author_id', '=', 'author.id');
+            })
+        ->groupBy('book.id','discount_price','discount_end_date','author_name')
         ->orderByRaw(
                 "CASE WHEN (book_price - coalesce(discount_price,book_price)) > 0 and(discount_end_date >= CURRENT_DATE 
                     or discount_end_date is null) THEN (book_price - coalesce(discount_price,book_price)) END desc nulls last,
                 CASE WHEN discount_price is NULL or discount_end_date < CURRENT_DATE THEN book_price END asc"
             )
-        ->limit($numberOfBooks);
-        $this->applyPagination($perPage);
+        ->limit($perPage);
+
+        $this->query->paginate($perPage);
         return $this->query->get();
     }
 }
-?>
