@@ -1,4 +1,6 @@
 <?php
+
+use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DiscountController;
@@ -29,6 +31,9 @@ Route::resource('books', BookController::class);
 
 //API Category
 Route::resource('categorys', CategoryController::class);
+
+//API Author
+Route::resource('authors', AuthorController::class);
 
 //API Order
 Route::resource('orders', OrderController::class);

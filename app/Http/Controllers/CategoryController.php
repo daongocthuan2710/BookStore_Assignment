@@ -8,22 +8,20 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Repositories\CategoryRepository;
 use GuzzleHttp\Psr7\Response;
-
+use App\Services\CategoryService;
 class CategoryController extends Controller
 {
-    private CategoryRepository $_categoryRespository;
+    private CategoryService $_categoryService;
 
-    public function __construct(CategoryRepository $categoryRespository )
+    public function __construct(CategoryService $categoryService )
     {
-        $this->_categoryRespository = $categoryRespository;
+        $this->_categoryService = $categoryService;
     }
 
     public function index(Request $request)
     {
-        // return Category::all();
-        // return response(new CategoryCollection(Category::paginate(5)));
-        $conditions = $request->get('filters');
-        return response($this->_categoryRespository->filter($conditions));
+        return Category::all();
+        
     }
 
     public function store(Request $request)

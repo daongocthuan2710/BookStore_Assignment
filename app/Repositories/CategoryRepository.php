@@ -18,21 +18,9 @@ class CategoryRepository extends BaseRepository
         return $this->query->find($id);
     }
 
-    public function filter($conditions = [])
+    public function filter($conditions,$perPage)
     {
-        foreach(explode(',',$conditions['with']) as $with){
-            switch($with){
-                case 'author':
-                    $this->query->with($with);
-                    break;
-                case 'category':
-                    $this->query->with($with);
-                    break;
-                default:
-                    break;
-            }
-        }
-        return $this->query->where('id',2)->get();
+        //
     }
 
     public function create($data)

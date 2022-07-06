@@ -15,7 +15,7 @@ class CategoryService
     {
         $this->_CategoryRepository->applyPagination($perPage);
     }
-
+  
     public function sortBy($request)
     {
 

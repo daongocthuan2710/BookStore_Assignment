@@ -29,8 +29,8 @@ class BookService extends BaseService
         else if($request->getBookPopular != null){
             return $this->getBookPopulars($request->getBookPopular);
         }
-        else if($request->getBookPopular != null){
-            return $this->getBookPopulars($request->getBookPopular);
+        else if($request->getBookRecommended != null){
+            return $this->getBookRecommendeds($request->getBookRecommended);
         }
         else return $this->getAll($perPage);
         // getAllPaginate
@@ -43,6 +43,7 @@ class BookService extends BaseService
             'filterAuthor' => explode(',',$request->author_id),
             'filterRatingStar' => explode(',',$request->ratingStarValue),
         ];
+        // return $conditions['filterCategory'];
         return $this->_BookRepository->filter($conditions,$perPage);
     }
 

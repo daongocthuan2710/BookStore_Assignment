@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect} from "react";
 import ControlledCarousel from "./CaroselsComp";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -8,42 +8,31 @@ import axios from "axios";
 
 function HomePage() {
     const [books, setBooks] = useState([]);
-    useEffect(() => {
-        // getOnSaleBooks();
-        getRecommendedBooks();
 
-    }, []);
+    useEffect(() => {
+        getRecommendedBooks();
+    },[]);
+   
     const getRecommendedBooks = () => {
         axios
         .get(`http://127.0.0.1:8000/api/books?getBookRecommended=8`)
         .then((res) => {
-            const datas = res.data;
+            const datas = res.data.data;
             setBooks(datas);
-            console.log('book data',datas);
+            console.log('book recom',datas);
         })
         .catch((error) => console.log(error));
-        // setBooks(...data);
         
-    }
-
-    const getOnSaleBooks = () => {
-        axios
-        .get(`http://127.0.0.1:8000/api/books?sortBy=onSale`)
-        .then((res) => {
-            const datas = res.data;
-            setBooks(datas);
-            console.log("data", datas);
-        })
-        .catch((error) => console.log(error));
     }
 
     const getPopularBooks = () => {
         axios
         .get(`http://127.0.0.1:8000/api/books?getBookPopular=8`)
         .then((res) => {
-            const datas = res.data;
+            console.log("res pop",res);
+            const datas = res.data.data;
             setBooks(datas);
-            console.log("data", datas);
+            console.log("dataPop", datas);
         })
         .catch((error) => console.log(error));
     }
@@ -70,7 +59,7 @@ function HomePage() {
                     </Col>
                 </Row>
                 <Row>
-                    <Col>{<ControlledCarousel />}</Col>
+                    <Col><ControlledCarousel/></Col>
                 </Row>
                 <Row>
                     <Col className="text-center fs-3 mt-5">Featured Books</Col>
