@@ -10,7 +10,7 @@ function FeaturedBooksGrid(props) {
         <Container>
             <Row>
                 {props.featured.map((book) => (
-                    <Col xs={6} md={3} className="mt-4">
+                    <Col xs={6} md={3} className="mt-4" key ={book.id}>
                         <Card>
                             <Link
                                 to="/productPage"

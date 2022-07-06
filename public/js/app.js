@@ -5600,8 +5600,14 @@ function ShopPage() {
       sorts = _useState12[0],
       setSorts = _useState12[1];
 
+  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+      _useState14 = _slicedToArray(_useState13, 2),
+      loading = _useState14[0],
+      setLoading = _useState14[1];
+
   var onChangeSort = function onChangeSort(event) {
     setSorts(event.target.value);
+    console.log(event.target.value);
   };
 
   var onChangShowPage = function onChangShowPage(event) {
@@ -5609,11 +5615,14 @@ function ShopPage() {
   };
 
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    setUrls("http://127.0.0.1:8000/api/books?sortBy=".concat(sorts, "&perPage=").concat(perPage));
-  }, [sorts, perPage]);
+    setUrls("http://127.0.0.1:8000/api/books?sortBy=".concat(sorts, "&perPage=").concat(perPage, "&page=").concat(currentPage));
+  }, [sorts, perPage, currentPage]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    setLoading(true);
     axios__WEBPACK_IMPORTED_MODULE_2___default().get(urls).then(function (res) {
+      setLoading(false);
       var datas = res.data;
+      console.log('data', datas.data);
       setBooks(datas.data);
       settotals(datas.total);
       setPerPage(datas.per_page);
@@ -5622,7 +5631,17 @@ function ShopPage() {
       return console.log(error);
     });
   }, [urls]);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.Fragment, {
+  return loading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+    className: "loadingStyle",
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+      className: "spinner-border m-5 ",
+      role: "status",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+        className: "visually-hidden",
+        children: "Loading..."
+      })
+    })
+  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.Fragment, {
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_4__["default"], {
       style: {
         paddingTop: "100px"
@@ -5635,7 +5654,7 @@ function ShopPage() {
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_6__["default"], {
           xs: 6,
           md: 6,
-          children: ["Show ", currentPage * perPage - perPage, " -", " ", currentPage * perPage, " in ", totals]
+          children: ["Show ", currentPage * perPage - perPage, " -", " ", currentPage * perPage <= totals ? currentPage * perPage : totals, " ", "in ", totals]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_6__["default"], {
           xs: 2,
           md: 2,
@@ -5726,10 +5745,10 @@ function ShopPage() {
               })]
             })]
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_6__["default"], {
           xs: 10,
           md: 10,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_5__["default"], {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_5__["default"], {
             children: books.map(function (book) {
               return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_6__["default"], {
                 xs: 6,
@@ -5787,7 +5806,40 @@ function ShopPage() {
                 })
               }, book.id);
             })
-          })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_5__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+              className: "text-center my-5",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
+                disabled: currentPage == 1,
+                onClick: function onClick() {
+                  return setCurrentPage(currentPage - 1);
+                },
+                children: "Previous"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
+                style: currentPage - 1 == 0 ? {
+                  display: "none"
+                } : {},
+                onClick: function onClick() {
+                  return setCurrentPage(currentPage - 1);
+                },
+                children: currentPage - 1
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
+                disabled: currentPage,
+                children: currentPage
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
+                onClick: function onClick() {
+                  return setCurrentPage(currentPage + 1);
+                },
+                children: currentPage + 1
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
+                disabled: currentPage == Math.ceil(totals / perPage),
+                onClick: function onClick() {
+                  return setCurrentPage(currentPage + 1);
+                },
+                children: "Next"
+              })]
+            })
+          })]
         })]
       })]
     })
@@ -6041,7 +6093,7 @@ function FeaturedBooksGrid(props) {
               })]
             })]
           })
-        });
+        }, book.id);
       })
     })
   });
@@ -6112,17 +6164,24 @@ function HomePage() {
     axios__WEBPACK_IMPORTED_MODULE_4___default().get("http://127.0.0.1:8000/api/books?getBookRecommended=8").then(function (res) {
       var datas = res.data;
       setBooks(datas);
-      console.log(datas);
+      console.log('book data', datas);
     })["catch"](function (error) {
       return console.log(error);
     }); // setBooks(...data);
   };
 
-  var getOnSaleBooks = function getOnSaleBooks() {//
+  var getOnSaleBooks = function getOnSaleBooks() {
+    axios__WEBPACK_IMPORTED_MODULE_4___default().get("http://127.0.0.1:8000/api/books?sortBy=onSale").then(function (res) {
+      var datas = res.data;
+      setBooks(datas);
+      console.log("data", datas);
+    })["catch"](function (error) {
+      return console.log(error);
+    });
   };
 
-  var getPopBooks = function getPopBooks() {
-    axios__WEBPACK_IMPORTED_MODULE_4___default().get("http://127.0.0.1:8000/api/books?getTopBooks=10").then(function (res) {
+  var getPopularBooks = function getPopularBooks() {
+    axios__WEBPACK_IMPORTED_MODULE_4___default().get("http://127.0.0.1:8000/api/books?getBookPopular=8").then(function (res) {
       var datas = res.data;
       setBooks(datas);
       console.log("data", datas);
@@ -6189,7 +6248,7 @@ function HomePage() {
           className: "text-start fs-4 mt-5",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
             onClick: function onClick() {
-              return getPopBooks();
+              return getPopularBooks();
             },
             id: "popular",
             className: "btn btn-primary text-start",
@@ -6229,7 +6288,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Components_Header_Header__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Components/Header/Header */ "./resources/js/Components/Header/Header.js");
 /* harmony import */ var _Components_homePage_homePage__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Components/homePage/homePage */ "./resources/js/Components/homePage/homePage.js");
 /* harmony import */ var _Components_ShopPage_shopPage__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Components/ShopPage/shopPage */ "./resources/js/Components/ShopPage/shopPage.js");
-/* harmony import */ var _css_app_scss__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../css/app.scss */ "./resources/css/app.scss");
+/* harmony import */ var _css_app_css__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../css/app.css */ "./resources/css/app.css");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 
 
@@ -6631,7 +6690,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "body {\r\n    font-family: 'Nunito', sans-serif;\r\n    padding: 0;\r\n    margin: 0;\r\n}\r\n\r\nmain {\r\n    min-height: 100vh;\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n    background: rgb(247, 250, 252);\r\n}\r\n\r\n.welcome-text {\r\n    color: #f75454;\r\n    font-weight: 600;\r\n    font-size: 2rem;\r\n    -webkit-font-smoothing: antialiased;\r\n    padding: 100px;\r\n    border: 5px solid #f75454;\r\n}\r\n\r\n.welcome-text > span {\r\n    font-size: 2.1rem;\r\n    text-shadow: 3px 3px #fbbcbc;\r\n}\r\n\r\n.small-welcome-text {\r\n    color: #f75454;\r\n    font-size: 0.5rem;\r\n    font-weight: bold;\r\n    margin-left: 6px;\r\n    margin-bottom: 1px;\r\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "body {\n    font-family: 'Nunito', sans-serif;\n    padding: 0;\n    margin: 0;\n}\n\nmain {\n    min-height: 100vh;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    background: rgb(247, 250, 252);\n}\n\n.welcome-text {\n    color: #f75454;\n    font-weight: 600;\n    font-size: 2rem;\n    -webkit-font-smoothing: antialiased;\n    padding: 100px;\n    border: 5px solid #f75454;\n}\n\n.welcome-text > span {\n    font-size: 2.1rem;\n    text-shadow: 3px 3px #fbbcbc;\n}\n\n.small-welcome-text {\n    color: #f75454;\n    font-size: 0.5rem;\n    font-weight: bold;\n    margin-left: 6px;\n    margin-bottom: 1px;\n}\n\n.loadingStyle{\n    display: flex;\n    height: 100vh;\n    width: 100vw;\n    justify-content: center;\n    align-items: center;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

@@ -19,7 +19,7 @@ function HomePage() {
         .then((res) => {
             const datas = res.data;
             setBooks(datas);
-            console.log(datas);
+            console.log('book data',datas);
         })
         .catch((error) => console.log(error));
         // setBooks(...data);
@@ -27,12 +27,19 @@ function HomePage() {
     }
 
     const getOnSaleBooks = () => {
-        //
+        axios
+        .get(`http://127.0.0.1:8000/api/books?sortBy=onSale`)
+        .then((res) => {
+            const datas = res.data;
+            setBooks(datas);
+            console.log("data", datas);
+        })
+        .catch((error) => console.log(error));
     }
 
-    const getPopBooks = () => {
+    const getPopularBooks = () => {
         axios
-        .get(`http://127.0.0.1:8000/api/books?getTopBooks=10`)
+        .get(`http://127.0.0.1:8000/api/books?getBookPopular=8`)
         .then((res) => {
             const datas = res.data;
             setBooks(datas);
@@ -81,7 +88,7 @@ function HomePage() {
                     </Col>
                     <Col className="text-start fs-4 mt-5">
                         <button
-                            onClick={() => getPopBooks()}
+                            onClick={() => getPopularBooks()}
                             id="popular"
                             className="btn btn-primary text-start"
                             type="button"

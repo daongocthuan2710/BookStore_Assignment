@@ -6,7 +6,7 @@ import Welcome from './welcome';
 import Header from './Components/Header/Header';
 import HomePage from './Components/homePage/homePage';
 import ShopPage from './Components/ShopPage/shopPage';
-import '../css/app.scss';
+import '../css/app.css';
 
 ReactDOM.render(
     <HashRouter>

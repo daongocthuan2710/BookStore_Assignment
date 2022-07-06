@@ -46,8 +46,7 @@ function ControlledCarousel() {
                     {books.map((book) => (
                         <Container>
                             <SwiperSlide
-                                key={book.id}
-                               
+                                key={book.id}                              
                                 className="my-5 px-5 col-4"
                             >
                                 <Card>

@@ -33,3 +33,11 @@ main {
     margin-left: 6px;
     margin-bottom: 1px;
 }
+
+.loadingStyle{
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    justify-content: center;
+    align-items: center;
+}

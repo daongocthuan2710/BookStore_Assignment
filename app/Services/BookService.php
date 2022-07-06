@@ -26,13 +26,16 @@ class BookService extends BaseService
         else if($request->book_id != null){
             return $this->getById($request->book_id,$perPage);
         }
-        else if($request->getBookRecommended != null){
-            return $this->getBookRecommendeds($request->getBookRecommended);
+        else if($request->getBookPopular != null){
+            return $this->getBookPopulars($request->getBookPopular);
+        }
+        else if($request->getBookPopular != null){
+            return $this->getBookPopulars($request->getBookPopular);
         }
         else return $this->getAll($perPage);
         // getAllPaginate
     }
-
+    
     public function filter($request,$perPage)
     {
        $conditions = [
@@ -48,12 +51,6 @@ class BookService extends BaseService
         $condition = $request->sortBy;
 
         return $this->_BookRepository->sortBy($condition,$perPage);
-    }
-    
-    public function search($request)
-    {
-        $condition = $request->keyWord;
-        return $this->_BookRepository->search($request);
     }
 
     public function getAll($perPage){
@@ -71,6 +68,12 @@ class BookService extends BaseService
     public function getBookRecommendeds($numberOfBooks){
         return $this->_BookRepository->getBookRecommendeds($numberOfBooks);
     }
+
+    public function getBookPopulars($numberOfBooks){
+        return $this->_BookRepository->getBookPopulars($numberOfBooks);
+    }
+
+    
     public function create($data)
     {
         //

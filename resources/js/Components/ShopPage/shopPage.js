@@ -13,25 +13,31 @@ function ShopPage() {
     const [perPage, setPerPage] = useState(15);
     const [currentPage, setCurrentPage] = useState(1);
     const [sorts, setSorts] = useState(1);
+    const [loading, setLoading] = useState(false);
 
     const onChangeSort = (event) => {
         setSorts(event.target.value);
+        console.log(event.target.value);
     };
 
     const onChangShowPage = (event) => {
         setPerPage(event.target.value);
+       
     };
     useEffect(() => {
         setUrls(
-            `http://127.0.0.1:8000/api/books?sortBy=${sorts}&perPage=${perPage}`
+            `http://127.0.0.1:8000/api/books?sortBy=${sorts}&perPage=${perPage}&page=${currentPage}`
         );
-    },[sorts,perPage]);
+    }, [sorts, perPage, currentPage]);
 
     useEffect(() => {
+        setLoading(true);
         axios
             .get(urls)
             .then((res) => {
+                setLoading(false);
                 const datas = res.data;
+                console.log('data',datas.data);
                 setBooks(datas.data);
                 settotals(datas.total);
                 setPerPage(datas.per_page);
@@ -40,7 +46,13 @@ function ShopPage() {
             .catch((error) => console.log(error));
     }, [urls]);
 
-    return (
+    return loading ? (
+        <div className="loadingStyle">
+            <div className="spinner-border m-5 " role="status">
+                <span className="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    ) : (
         <>
             <Container style={{ paddingTop: "100px" }}>
                 <Row>
@@ -49,7 +61,10 @@ function ShopPage() {
                     </Col>
                     <Col xs={6} md={6}>
                         Show {currentPage * perPage - perPage} -{" "}
-                        {currentPage * perPage} in {totals}
+                        {currentPage * perPage <= totals
+                            ? currentPage * perPage
+                            : totals}{" "}
+                        in {totals}
                     </Col>
                     <Col xs={2} md={2}>
                         <select
@@ -189,6 +204,51 @@ function ShopPage() {
                                     </Card>
                                 </Col>
                             ))}
+                        </Row>
+                        <Row>
+                            <div className="text-center my-5">
+                                <button
+                                    disabled={currentPage == 1}
+                                    onClick={() =>
+                                        setCurrentPage(currentPage - 1)
+                                    }
+                                >
+                                    Previous
+                                </button>
+                                <button
+                                    style={
+                                        currentPage - 1 == 0
+                                            ? { display: "none" }
+                                            : {}
+                                    }
+                                    onClick={() =>
+                                        setCurrentPage(currentPage - 1)
+                                    }
+                                >
+                                    {currentPage - 1}
+                                </button>
+                                <button disabled={currentPage}>
+                                    {currentPage}
+                                </button>
+                                <button
+                                    onClick={() =>
+                                        setCurrentPage(currentPage + 1)
+                                    }
+                                >
+                                    {currentPage + 1}
+                                </button>
+                                <button
+                                    disabled={
+                                        currentPage ==
+                                        Math.ceil(totals / perPage)
+                                    }
+                                    onClick={() =>
+                                        setCurrentPage(currentPage + 1)
+                                    }
+                                >
+                                    Next
+                                </button>
+                            </div>
                         </Row>
                     </Col>
                 </Row>
