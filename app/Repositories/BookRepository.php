@@ -115,7 +115,7 @@ class BookRepository extends BaseRepository
 
             if ($conditions['filterRatingStar'] != [""]) {
                 $this->query
-                ->selectRaw('book.id,book_title,book_price,book_cover_photo,author_name,author_id,avg(rating_start) as avgRatingStar,discount_price,discount_end_date,
+                ->selectRaw('book.id,book_title,book_price,book_cover_photo,author_name,author_id,avg(rating_start) AS avgRatingStar,discount_price,discount_end_date,
                 CASE
                     WHEN discount_end_date > CURRENT_DATE THEN discount_price
                     WHEN discount_end_date < CURRENT_DATE THEN book_price
@@ -132,8 +132,9 @@ class BookRepository extends BaseRepository
                     $join->on('book.id', '=', 'review.book_id');
                 })
                 ->groupBy('book.id', 'discount_price', 'discount_end_date', 'author_name')
-                    ->havingRaw('avgRatingStar > 2.0')
-                    ->orderByRaw('avgRatingStar DESC NULLS LAST');
+                ->havingRaw('avg(rating_start) >= ?')
+                ->orderByRaw('avgRatingStar DESC NULLS LAST')
+                ->setBindings([MAX($conditions['filterRatingStar'])]);
             }
 
             $this->query->get();

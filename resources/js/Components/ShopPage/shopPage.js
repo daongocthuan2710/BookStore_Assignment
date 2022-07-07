@@ -42,10 +42,10 @@ function ShopPage() {
 
     const onChangeRatingStar = (event) => {
         if (event.target.checked == true) {
-            setCategorys(categorys + "," + event.target.value);
+            setRatingStars(RatingStars + "," + event.target.value);
         } else {
-            const temp = categorys.replace(`,${event.target.value}`, "");
-            setCategorys(temp);
+            const temp = RatingStars.replace(`,${event.target.value}`, "");
+            setRatingStars(temp);
         }
     };
 
@@ -57,7 +57,7 @@ function ShopPage() {
             `/api/books?sortBy=${sorts}&perPage=${perPage}&page=${currentPage}&category_id=${categorys.replace(
                 ",",
                 ""
-            )}&author_id=${authors.replace(",", "")}`
+            )}&author_id=${authors.replace(",", "")}&ratingStarValue=${RatingStars.replace(",", "")}`
         );
     }, [sorts, perPage, currentPage, categorys, authors, RatingStars]);
 
@@ -68,7 +68,6 @@ function ShopPage() {
             .then((res) => {
                 setLoading(false);
                 const datas = res.data;
-                console.log("dataaa:", datas);
                 setBooks(datas.data);
                 settotals(datas.total);
                 setPerPage(datas.per_page);
