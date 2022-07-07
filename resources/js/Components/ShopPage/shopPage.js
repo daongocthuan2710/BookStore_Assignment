@@ -8,14 +8,14 @@ import HeaderShopPage from "./headerShopPage";
 
 function ShopPage() {
     const [urls, setUrls] = useState(
-        "./api/books?sortBy=onSale&perPage=15"
+        "/api/books?sortBy=onSale&perPage=15"
     );
     const [books, setBooks] = useState([]);
     const [totals, settotals] = useState(0);
     const [perPage, setPerPage] = useState(15);
     const [currentPage, setCurrentPage] = useState(1);
     const [sorts, setSorts] = useState("onSale");
-    const [categorys, setCategorys] = useState([]);
+    const [categorys, setCategorys] = useState('');
     const [authors, setAuthors] = useState("");
     const [RatingStars, setRatingStars] = useState("");
     const [loading, setLoading] = useState(false);
@@ -24,26 +24,43 @@ function ShopPage() {
         setSorts(event.target.value);
     };
 
+    // const onChangeCategory = (event) => {
+    //     if (event.target.checked == true) {
+    //         const temp = categorys;
+    //         temp.push(event.target.value);
+    //         console.log("category", categorys);
+    //         console.log("url", urls);
+    //         console.log("temp:checked", temp, "typeOf", typeof temp);
+    //         setCategorys(temp);
+    //         console.log("category", categorys);
+    //     } else {
+    //         const temp = categorys;
+    //         const index = temp.indexOf(event.target.value);
+    //         temp.splice(index, 1);
+    //         console.log("category", categorys);
+    //         console.log("url", urls);
+    //         console.log("temp:unchecked", temp, "typeOf", typeof temp);
+    //         setCategorys(temp);
+    //         console.log("category", categorys);
+    //     }
+    // };
+
     const onChangeCategory = (event) => {
         if (event.target.checked == true) {
-            const temp = categorys;
-            temp.push(event.target.value);
-            console.log("category", categorys);
+            setCategorys(categorys + ',' + event.target.value);
             console.log("url", urls);
-            console.log("temp:checked", temp, "typeOf", typeof temp);
-            setCategorys(temp);
+            console.log("temp:checked", categorys, "typeOf", typeof categorys);
+            
             console.log("category", categorys);
         } else {
-            const temp = categorys;
-            const index = temp.indexOf(event.target.value);
-            temp.splice(index, 1);
-            console.log("category", categorys);
-            console.log("url", urls);
-            console.log("temp:unchecked", temp, "typeOf", typeof temp);
+            const temp = categorys.replace(`,${event.target.value}`, '');
+            console.log("temp", temp);
             setCategorys(temp);
-            console.log("category", categorys);
+            console.log("url", urls);
+            console.log("temp:unchecked", categorys, "typeOf", typeof categorys);
         }
     };
+
 
     const onChangeAuthor = (event) => {
         console.log(event);
@@ -61,7 +78,7 @@ function ShopPage() {
     useEffect(() => {
         console.log("run urls");
         setUrls(
-            `.api/books?sortBy=${sorts}&perPage=${perPage}&page=${currentPage}&category_id=${categorys}&author_id=${authors}`
+            `/api/books?sortBy=${sorts}&perPage=${perPage}&page=${currentPage}&category_id=${categorys.replace(',', '')}&author_id=${authors}`
         );
     }, [sorts, perPage, currentPage, categorys, authors, RatingStars]);
 
@@ -80,7 +97,7 @@ function ShopPage() {
                 setCurrentPage(datas.current_page);
             })
             .catch((error) => console.log(error));
-    }, []);
+    }, [urls]);
 
     return (
         <>

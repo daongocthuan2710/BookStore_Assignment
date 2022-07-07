@@ -24,7 +24,7 @@ function BookCard(prop) {
                     </Card.Title>
                     <Card.Text>{prop.book.author_name}</Card.Text>
                     <Card.Text className="text-center ml-5">
-                        <TextRating value = {prop.book.avgratingstar == null ? 0 : prop.book.avgratingstar} />
+                        <TextRating value = {prop.book.avgratingstar == null ? 0 : 1.0 * prop.book.avgratingstar} />
                     </Card.Text>
                     <Card.Text className="bg-aqua card-footer bg-transparent">
                         {(() => {

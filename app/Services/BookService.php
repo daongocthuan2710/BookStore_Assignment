@@ -12,38 +12,45 @@ class BookService extends BaseService
     }
 
     public function index($request){
-
         $perPage = $request->perPage ?? 15;  
         if ($request->category_id != null or $request->author_id != null or $request->ratingStarValue != null){
             return $this->filter($request,$perPage);
         }
-        else if($request->sortBy != null){
+
+        if($request->sortBy != null){
             return $this->sortBy($request,$perPage);
         }
-        else if($request->getTopBooks != null){
+        
+        if($request->getTopBooks != null){
             return $this->getTopBooks($request->getTopBooks);
         }
-        else if($request->book_id != null){
+        
+        if($request->book_id != null){
             return $this->getById($request->book_id,$perPage);
         }
-        else if($request->getBookPopular != null){
+        
+        if($request->getBookPopular != null){
             return $this->getBookPopulars($request->getBookPopular);
         }
-        else if($request->getBookRecommended != null){
+        
+        if($request->getBookRecommended != null){
             return $this->getBookRecommendeds($request->getBookRecommended);
         }
-        else return $this->getAll($perPage);
-        // getAllPaginate
+
+        if($request->all() == []){
+            return $this->getAll($perPage);
+        }
+
     }
     
     public function filter($request,$perPage)
     {
        $conditions = [
-            'filterCategory' => explode(',',substr($request->category_id,1,-1)),
+            'filterCategory' => explode(',',$request->category_id),
             'filterAuthor' => explode(',',$request->author_id),
             'filterRatingStar' => explode(',',$request->ratingStarValue),
         ];
-        // return $conditions['filterCategory'];
+        // return dd($conditions['filterCategory']);
         return $this->_BookRepository->filter($conditions,$perPage);
     }
 

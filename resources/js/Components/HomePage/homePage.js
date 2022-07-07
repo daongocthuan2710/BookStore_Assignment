@@ -2,7 +2,6 @@ import React, { useState, useEffect} from "react";
 import ControlledCarousel from "./CaroselsComp";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { Caret_Right } from "../../../assets/icons/caret-right.svg";
 import FeaturedBooksGrid from "./featuredBooksGrid";
 import axios from "axios";
 
@@ -49,11 +48,6 @@ function HomePage() {
                         <Button variant="info" className="ml-5">
                             <Link to="/shopPage" className="nav-link">
                                 View All
-                                <img
-                                    className="img-responsive"
-                                    src={Caret_Right}
-                                    alt=""
-                                />
                             </Link>
                         </Button>
                     </Col>

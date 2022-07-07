@@ -1,7 +1,6 @@
 import { Navbar, Nav, NavDropdown, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import LogoApp from "../../../assets/bookworm_icon.svg";
-import {FiHome , BiCartAlt} from "react-icons";
 
 function NavbarComp() {
     return (
@@ -31,14 +30,12 @@ function NavbarComp() {
                             <Link
                                 to="/homePage"
                                 className="nav-link"
-                                icon={<FiHome />}
                             >
                                 Home
                             </Link>
                             <Link
                                 to="/shopPage"
                                 className="nav-link"
-                                icon={<BiCartAlt />}
                             >
                                 Shop
                             </Link>

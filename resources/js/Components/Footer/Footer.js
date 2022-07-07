@@ -1,5 +1,5 @@
 import React from "react";
-import { CDBFooter, CDBBtn, CDBIcon, CDBBox } from "cdbreact";
+import { CDBFooter, CDBBtn, CDBIcon, CDBBox} from "cdbreact";
 import LogoApp from "../../../assets/bookworm_icon.svg";
 import { Link } from "react-router-dom";
 

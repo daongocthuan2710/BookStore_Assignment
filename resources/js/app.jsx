@@ -10,7 +10,8 @@ import '../css/app.css';
 import ProductPage from './Components/ProductPage/Product';
 
 import About from './Components/About/AboutPage';
-import Footer from './Components/Footer/Footer';
+// import Demofooter from './Components/Footer/demofooter';
+// import {Footer} from './Components/Footer/Footer';
 
 ReactDOM.render(
     <HashRouter>
@@ -20,14 +21,14 @@ ReactDOM.render(
             <Route path="/homePage" element={<HomePage/>}></Route>
             <Route path="/shopPage" element={<ShopPage/>}></Route>
             <Route path="/cartPage" element={<Welcome/>}></Route>
-            <Route path="/productPage/:id" element={<ProductPage/>}></Route>
+            <Route path="/productPage" element={<ProductPage/>}></Route>
             <Route path="/aboutPage" element={<About/>}></Route>
             <Route path="/loginPage" element={<Welcome/>}></Route>
             
         </Routes> 
-    <Footer/>
+        {/* <Demofooter/> */}
+    {/* <Footer/> */}
     </HashRouter>
-    
   ,document.getElementById('root')
 );
 
