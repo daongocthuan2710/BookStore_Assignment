@@ -18,7 +18,6 @@ function HomePage() {
         .then((res) => {
             const datas = res.data.data;
             setBooks(datas);
-            console.log('book recom',datas);
         })
         .catch((error) => console.log(error));
         
@@ -28,10 +27,8 @@ function HomePage() {
         axios
         .get(`./api/books?getBookPopular=8`)
         .then((res) => {
-            console.log("res pop",res);
             const datas = res.data.data;
             setBooks(datas);
-            console.log("dataPop", datas);
         })
         .catch((error) => console.log(error));
     }

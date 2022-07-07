@@ -20,7 +20,6 @@ function ControlledCarousel() {
         .then((res) => {
             const datas = res.data.data;
             setBooks(datas);
-            console.log("data", datas);
         })
         .catch((error) => console.log(error));
     },[]);

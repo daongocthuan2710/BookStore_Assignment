@@ -5,7 +5,6 @@ import StarIcon from "@mui/icons-material/Star";
 
 export default function TextRating(props) {
     return (
-        <>
             <Box
                 sx={{
                     width: 200,
@@ -26,6 +25,5 @@ export default function TextRating(props) {
                     }
                 />
             </Box>
-        </>
     );
 }

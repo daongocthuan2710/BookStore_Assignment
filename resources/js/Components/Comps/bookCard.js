@@ -5,7 +5,6 @@ import TextRating from "./RatingStar";
 
 function BookCard(prop) {
     return (
-        <>
             <Card>
                 <Link
                     to={`/productPage/${prop.book.id}`}
@@ -23,7 +22,7 @@ function BookCard(prop) {
                         {prop.book.book_title}
                     </Card.Title>
                     <Card.Text>{prop.book.author_name}</Card.Text>
-                    <Card.Text className="text-center ml-5">
+                    <Card.Text className="text-center ms-5">
                         <TextRating value = {prop.book.avgratingstar == null ? 0 : 1.0 * prop.book.avgratingstar} />
                     </Card.Text>
                     <Card.Text className="bg-aqua card-footer bg-transparent">
@@ -57,7 +56,6 @@ function BookCard(prop) {
                     </Card.Text>
                 </Card.Body>
             </Card>
-        </>
     );
 }
 export default BookCard;

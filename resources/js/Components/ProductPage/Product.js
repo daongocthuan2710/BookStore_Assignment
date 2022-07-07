@@ -1,27 +1,32 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import axios from "axios";
-import { bookCover } from "../../datas/bookCover";
-import { Row, Col, Container, Form, Button } from "react-bootstrap";
+// import React, { useState, useEffect } from "react";
+// import { useParams } from "react-router-dom";
+// import axios from "axios";
+// import { bookCover } from "../../datas/bookCover";
+// import { Row, Col, Container, Form, Button } from "react-bootstrap";
 
 function ProductPage() {
     let params = useParams();
-    const [books, setBooks] = useState([]);
+    // let bookId = Number.parseInt(string,window.location.pathname.split(separator,"/").at(index-1));
+    // console.log(bookId);
+    console.log(params);
+    // const [books, setBooks] = useState([]);
 
-    useEffect(() => {
-        axios
-            .get(`./api/books?book_id=${params.id}`)
-            .then((res) => {
-                const datas = res.data.data;
-                setBooks(datas[0]);
-                console.log(datas[0]);
-            })
-            .catch((error) => console.log(error));
-    }, []);
+    // useEffect(() => {
+    //     axios
+    //         .get(`./api/books?book_id=${params.id}`)
+    //         .then((res) => {
+    //             const datas = res.data.data;
+    //             console.log(res);
+    //             setBooks(datas[0]);
+    //             console.log(datas[0]);
+    //         })
+    //         .catch((error) => console.log(error));
+    // }, []);
 
     return (
         <>
-            <Container style={{ paddingTop: "100px" }}>
+        <div>aaa</div>
+            {/* <Container style={{ paddingTop: "100px" }}>
                 <Row className=" fs-3 mb-5">
                     <Col md={12}>{books.category_name}</Col>
                     <Col md={12}>
@@ -78,7 +83,7 @@ function ProductPage() {
                 <Row>
                     <Col md={8}></Col>
                     <Col md={4}>
-                        <Form className=" p-2 border rounded">
+                        <Form className=" p-2 bor">
                             <Form.Group className="mb-3" controlId="">
                                 <Form.Label>Add a title</Form.Label>
                                 <Form.Control type="" />
@@ -121,7 +126,7 @@ function ProductPage() {
                         </Form>
                     </Col>
                 </Row>
-            </Container>
+            </Container> */}
         </>
     );
 }

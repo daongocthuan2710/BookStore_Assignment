@@ -4,7 +4,8 @@ import BookCard from "../Comps/bookCard";
 
 import axios from "axios";
 import FilterShopPage from "./filterShopPage/filterShopPage";
-import HeaderShopPage from "./headerShopPage";
+import HeaderShopPage from "./ShopComps/headerShopPage";
+// import PaginationButton from "./ShopComps/PaginationButton";
 
 function ShopPage() {
     const [urls, setUrls] = useState("/api/books?sortBy=onSale&perPage=15");
@@ -100,12 +101,13 @@ function ShopPage() {
                         />
                     </Col>
 
-                    <Col xs={10} md={10}>
+                    <Col xs={10} md={10} className ="text-center">
                         {(() => {
                             return loading ? (
                                 <div className="loadingStyle">
                                     <div
-                                        className="spinner-border mr-5 "
+                                        className="spinner-border"
+                                        style ={{marginRight: "30rem"}}
                                         role="status"
                                     >
                                         <span className="visually-hidden">
@@ -139,6 +141,11 @@ function ShopPage() {
                                     onClick={() =>
                                         setCurrentPage(currentPage - 1)
                                     }
+                                    style={
+                                        Math.ceil(totals / perPage) < 2
+                                            ? { display: "none" }
+                                            : {}
+                                    }
                                 >
                                     Previous
                                 </button>
@@ -158,6 +165,11 @@ function ShopPage() {
                                 <button
                                     className="btn btn-outline-secondary me-2"
                                     disabled={currentPage}
+                                    style={
+                                        Math.ceil(totals / perPage) < 2
+                                            ? { display: "none" }
+                                            : {}
+                                    }
                                 >
                                     {currentPage}
                                 </button>
@@ -165,6 +177,11 @@ function ShopPage() {
                                     disabled={
                                         currentPage ==
                                         Math.ceil(totals / perPage)
+                                    }
+                                    style={
+                                        Math.ceil(totals / perPage) < 2
+                                            ? { display: "none" }
+                                            : {}
                                     }
                                     className="btn btn-outline-secondary me-2"
                                     onClick={() =>
@@ -179,6 +196,11 @@ function ShopPage() {
                                         currentPage ==
                                         Math.ceil(totals / perPage)
                                     }
+                                    style={
+                                        Math.ceil(totals / perPage) < 2
+                                            ? { display: "none" }
+                                            : {}
+                                    }
                                     onClick={() =>
                                         setCurrentPage(currentPage + 1)
                                     }
@@ -186,6 +208,12 @@ function ShopPage() {
                                     Next
                                 </button>
                             </div>
+                            {/* <PaginationButton
+                                totals={totals}
+                                perPage={perPage}
+                                currentPage={currentPage}
+                                setCurrentPage = {setCurrentPage}
+                            /> */}
                         </Row>
                     </Col>
                 </Row>
