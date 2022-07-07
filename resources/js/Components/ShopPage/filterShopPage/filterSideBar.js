@@ -62,16 +62,22 @@ const ConTentFiler = (props) => {
                                 active={true}
                                 icon={<MdOutlineCategory />}
                             >
-                                <span className = "fs-5 fw-bold">Category</span >
-                                <CategoryCheckboxs onChangeCategory = {props.onChangeCategory}/>
+                                <span className="fs-5 fw-bold">Category</span>
+                                <CategoryCheckboxs
+                                    onChangeCategory={props.onChangeCategory}
+                                />
                             </MenuItem>
                             <MenuItem icon={<RiPencilLine />}>
-                                <span className = "fs-5 fw-bold">Author</span >
-                                <AuthorCheckboxs />
+                                <span className="fs-5 fw-bold">Author</span>
+                                <AuthorCheckboxs
+                                    onChangeAuthor={props.onChangeAuthor}
+                                />
                             </MenuItem>
                             <MenuItem icon={<FiStar />}>
-                                <span className = "fs-5 fw-bold">RatingStar</span >
-                                <RatingStarCheckboxs />
+                                <span className="fs-5 fw-bold">RatingStar</span>
+                                <RatingStarCheckboxs
+                                    onChangeRatingStar={props.onChangeRatingStar}
+                                />
                             </MenuItem>
                         </Menu>
                     </SidebarContent>

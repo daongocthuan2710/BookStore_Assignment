@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function RatingStarCheckboxs() {
+export default function RatingStarCheckboxs(props) {
     return (
         <>
                 <div className="form-check" key = {1}>
@@ -9,6 +9,7 @@ export default function RatingStarCheckboxs() {
                         type="checkbox"
                         value={1}
                         id="1"
+                        onChange = {props.onChangeRatingStar}
                     />
                     <label className="form-check-label" htmlFor="flexCheckDefault" >
                         1 Star
@@ -20,6 +21,7 @@ export default function RatingStarCheckboxs() {
                         type="checkbox"
                         value={2}
                         id="2"
+                        onChange = {props.onChangeRatingStar}
                     />
                     <label className="form-check-label" htmlFor="flexCheckDefault">
                         2 Star
@@ -31,6 +33,7 @@ export default function RatingStarCheckboxs() {
                         type="checkbox"
                         value={3}
                         id="3"
+                        onChange = {props.onChangeRatingStar}
                     />
                     <label className="form-check-label" htmlFor="flexCheckDefault">
                         3 Star
@@ -42,6 +45,7 @@ export default function RatingStarCheckboxs() {
                         type="checkbox"
                         value={4}
                         id="4"
+                        onChange = {props.onChangeRatingStar}
                     />
                     <label className="form-check-label" htmlFor="flexCheckDefault">
                         4 Star
@@ -53,6 +57,7 @@ export default function RatingStarCheckboxs() {
                         type="checkbox"
                         value={5}
                         id="5"
+                        onChange = {props.onChangeRatingStar}
                     />
                     <label className="form-check-label" htmlFor="flexCheckDefault">
                         5 Star

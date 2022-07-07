@@ -1,7 +1,7 @@
 import React, {useEffect } from "react";
 import axios from "axios";
 
-export default function AuthorCheckboxs() {
+export default function AuthorCheckboxs(props) {
     const [authors, setAuthors] = React.useState([]);
     useEffect(() => {
         axios
@@ -22,6 +22,7 @@ export default function AuthorCheckboxs() {
                         type="checkbox"
                         value={author.id}
                         id="flexCheckDefault"
+                        onChange = {props.onChangeAuthor}
                     />
                     <label className="form-check-label" htmlFor="flexCheckDefault">
                         {author.author_name}

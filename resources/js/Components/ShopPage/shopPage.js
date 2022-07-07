@@ -7,15 +7,13 @@ import FilterShopPage from "./filterShopPage/filterShopPage";
 import HeaderShopPage from "./headerShopPage";
 
 function ShopPage() {
-    const [urls, setUrls] = useState(
-        "/api/books?sortBy=onSale&perPage=15"
-    );
+    const [urls, setUrls] = useState("/api/books?sortBy=onSale&perPage=15");
     const [books, setBooks] = useState([]);
     const [totals, settotals] = useState(0);
     const [perPage, setPerPage] = useState(15);
     const [currentPage, setCurrentPage] = useState(1);
     const [sorts, setSorts] = useState("onSale");
-    const [categorys, setCategorys] = useState('');
+    const [categorys, setCategorys] = useState("");
     const [authors, setAuthors] = useState("");
     const [RatingStars, setRatingStars] = useState("");
     const [loading, setLoading] = useState(false);
@@ -24,73 +22,53 @@ function ShopPage() {
         setSorts(event.target.value);
     };
 
-    // const onChangeCategory = (event) => {
-    //     if (event.target.checked == true) {
-    //         const temp = categorys;
-    //         temp.push(event.target.value);
-    //         console.log("category", categorys);
-    //         console.log("url", urls);
-    //         console.log("temp:checked", temp, "typeOf", typeof temp);
-    //         setCategorys(temp);
-    //         console.log("category", categorys);
-    //     } else {
-    //         const temp = categorys;
-    //         const index = temp.indexOf(event.target.value);
-    //         temp.splice(index, 1);
-    //         console.log("category", categorys);
-    //         console.log("url", urls);
-    //         console.log("temp:unchecked", temp, "typeOf", typeof temp);
-    //         setCategorys(temp);
-    //         console.log("category", categorys);
-    //     }
-    // };
-
     const onChangeCategory = (event) => {
         if (event.target.checked == true) {
-            setCategorys(categorys + ',' + event.target.value);
-            console.log("url", urls);
-            console.log("temp:checked", categorys, "typeOf", typeof categorys);
-            
-            console.log("category", categorys);
+            setCategorys(categorys + "," + event.target.value);
         } else {
-            const temp = categorys.replace(`,${event.target.value}`, '');
-            console.log("temp", temp);
+            const temp = categorys.replace(`,${event.target.value}`, "");
             setCategorys(temp);
-            console.log("url", urls);
-            console.log("temp:unchecked", categorys, "typeOf", typeof categorys);
         }
     };
 
-
     const onChangeAuthor = (event) => {
-        console.log(event);
-        setAuthors(event.target.value);
+        if (event.target.checked == true) {
+            setAuthors(authors + "," + event.target.value);
+        } else {
+            const temp = authors.replace(`,${event.target.value}`, "");
+            setAuthors(temp);
+        }
     };
 
     const onChangeRatingStar = (event) => {
-        console.log(event);
-        setRatingStars(event.target.value);
+        if (event.target.checked == true) {
+            setCategorys(categorys + "," + event.target.value);
+        } else {
+            const temp = categorys.replace(`,${event.target.value}`, "");
+            setCategorys(temp);
+        }
     };
 
     const onChangShowPage = (event) => {
         setPerPage(event.target.value);
     };
     useEffect(() => {
-        console.log("run urls");
         setUrls(
-            `/api/books?sortBy=${sorts}&perPage=${perPage}&page=${currentPage}&category_id=${categorys.replace(',', '')}&author_id=${authors}`
+            `/api/books?sortBy=${sorts}&perPage=${perPage}&page=${currentPage}&category_id=${categorys.replace(
+                ",",
+                ""
+            )}&author_id=${authors.replace(",", "")}`
         );
     }, [sorts, perPage, currentPage, categorys, authors, RatingStars]);
 
     useEffect(() => {
         setLoading(true);
-        console.log(urls);
         axios
             .get(urls)
             .then((res) => {
                 setLoading(false);
                 const datas = res.data;
-                console.log("dataaa:",datas);
+                console.log("dataaa:", datas);
                 setBooks(datas.data);
                 settotals(datas.total);
                 setPerPage(datas.per_page);
@@ -116,7 +94,11 @@ function ShopPage() {
                 </Row>
                 <Row>
                     <Col xs={2} md={2}>
-                        <FilterShopPage onChangeCategory={onChangeCategory} />
+                        <FilterShopPage
+                            onChangeRatingStar={onChangeRatingStar}
+                            onChangeCategory={onChangeCategory}
+                            onChangeAuthor={onChangeAuthor}
+                        />
                     </Col>
 
                     <Col xs={10} md={10}>
