@@ -15,7 +15,7 @@ function HomePage() {
    
     const getRecommendedBooks = () => {
         axios
-        .get(`http://127.0.0.1:8000/api/books?getBookRecommended=8`)
+        .get(`./api/books?getBookRecommended=8`)
         .then((res) => {
             const datas = res.data.data;
             setBooks(datas);
@@ -27,7 +27,7 @@ function HomePage() {
 
     const getPopularBooks = () => {
         axios
-        .get(`http://127.0.0.1:8000/api/books?getBookPopular=8`)
+        .get(`./api/books?getBookPopular=8`)
         .then((res) => {
             console.log("res pop",res);
             const datas = res.data.data;

@@ -8,7 +8,7 @@ import HeaderShopPage from "./headerShopPage";
 
 function ShopPage() {
     const [urls, setUrls] = useState(
-        "http://127.0.0.1:8000/api/books?sortBy=onSale&perPage=15"
+        "./api/books?sortBy=onSale&perPage=15"
     );
     const [books, setBooks] = useState([]);
     const [totals, settotals] = useState(0);
@@ -18,25 +18,33 @@ function ShopPage() {
     const [categorys, setCategorys] = useState([]);
     const [authors, setAuthors] = useState("");
     const [RatingStars, setRatingStars] = useState("");
-    // const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const onChangeSort = (event) => {
         setSorts(event.target.value);
     };
 
     const onChangeCategory = (event) => {
-        console.log(event);
         if (event.target.checked == true) {
-            setCategorys([...categorys, event.target.value]);
+            const temp = categorys;
+            temp.push(event.target.value);
+            console.log("category", categorys);
+            console.log("url", urls);
+            console.log("temp:checked", temp, "typeOf", typeof temp);
+            setCategorys(temp);
+            console.log("category", categorys);
         } else {
-            //     setCategorys(
-            //         {categorys,filter(function (element) {
-            //             return element !== event.target.value;
-            //         })
-            // });
+            const temp = categorys;
+            const index = temp.indexOf(event.target.value);
+            temp.splice(index, 1);
+            console.log("category", categorys);
+            console.log("url", urls);
+            console.log("temp:unchecked", temp, "typeOf", typeof temp);
+            setCategorys(temp);
+            console.log("category", categorys);
         }
     };
-    console.log("aaa", categorys);
+
     const onChangeAuthor = (event) => {
         console.log(event);
         setAuthors(event.target.value);
@@ -51,19 +59,21 @@ function ShopPage() {
         setPerPage(event.target.value);
     };
     useEffect(() => {
+        console.log("run urls");
         setUrls(
-            `http://127.0.0.1:8000/api/books?sortBy=${sorts}&perPage=${perPage}&page=${currentPage}&category_id=${categorys}&author_id=${authors}`
+            `.api/books?sortBy=${sorts}&perPage=${perPage}&page=${currentPage}&category_id=${categorys}&author_id=${authors}`
         );
     }, [sorts, perPage, currentPage, categorys, authors, RatingStars]);
 
     useEffect(() => {
-        // setLoading(true);
+        setLoading(true);
+        console.log(urls);
         axios
             .get(urls)
             .then((res) => {
-                // setLoading(false);
+                setLoading(false);
                 const datas = res.data;
-                console.log("data", datas.data);
+                console.log("dataaa:",datas);
                 setBooks(datas.data);
                 settotals(datas.total);
                 setPerPage(datas.per_page);
@@ -73,14 +83,6 @@ function ShopPage() {
     }, []);
 
     return (
-        // loading ? (
-        //     <div className="loadingStyle">
-        //         <div className="spinner-border m-5 " role="status">
-        //             <span className="visually-hidden">Loading...</span>
-        //         </div>
-        //     </div>
-        // ) :
-
         <>
             <Container
                 className="container-fluid px-0"
@@ -101,20 +103,36 @@ function ShopPage() {
                     </Col>
 
                     <Col xs={10} md={10}>
-                        <Row>
-                            {books.map((book) => (
-                                <Col
-                                    xs={12}
-                                    sm={6}
-                                    md={4}
-                                    lg={3}
-                                    className="mt-4"
-                                    key={book.id}
-                                >
-                                    <BookCard book={book} />
-                                </Col>
-                            ))}
-                        </Row>
+                        {(() => {
+                            return loading ? (
+                                <div className="loadingStyle">
+                                    <div
+                                        className="spinner-border mr-5 "
+                                        role="status"
+                                    >
+                                        <span className="visually-hidden">
+                                            Loading...
+                                        </span>
+                                    </div>
+                                </div>
+                            ) : (
+                                <Row>
+                                    {books.map((book) => (
+                                        <Col
+                                            xs={12}
+                                            sm={6}
+                                            md={4}
+                                            xl={3}
+                                            className="mt-4"
+                                            key={book.id}
+                                        >
+                                            <BookCard book={book} />
+                                        </Col>
+                                    ))}
+                                </Row>
+                            );
+                        })()}
+
                         <Row>
                             <div className="text-center my-5">
                                 <button

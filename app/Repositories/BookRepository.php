@@ -37,8 +37,31 @@ class BookRepository extends BaseRepository
 
     public function getById($id)
     {
-        $this->query->with(['author', 'category']);
-        return $this->query->find($id);
+        $this->query
+        ->selectRaw('book.id,book_title,book_price,book_cover_photo,book_summary,category_name,author_name,category_id,avg(rating_start) as avgRatingStar,discount_price,discount_end_date,
+        CASE
+            WHEN discount_end_date > CURRENT_DATE THEN discount_price
+            WHEN discount_end_date < CURRENT_DATE THEN book_price
+            WHEN discount_price is not null and discount_end_date is null THEN discount_price
+            ELSE book_price
+        end as final_price')
+        ->leftJoin('discount', function ($join) {
+            $join->on('book.id', '=', 'discount.book_id');
+        })
+        ->leftJoin('author', function ($join) {
+            $join->on('book.author_id', '=', 'author.id');
+        })
+        ->leftJoin('category', function ($join) {
+            $join->on('book.category_id', '=', 'category.id');
+        })
+        ->leftJoin('review', function ($join) {
+            $join->on('book.id', '=', 'review.book_id');
+        })
+        ->groupBy('book.id', 'discount_price', 'discount_end_date', 'author_name','category_name')
+        ->where('book.id', $id);
+    
+        $this->query->get();
+        return $this->query->paginate();
     }
 
     public function filter($conditions, $perPage)

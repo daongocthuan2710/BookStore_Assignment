@@ -1,10 +1,9 @@
-import React, { Component } from "react";
+import React from "react";
 import { CDBFooter, CDBBtn, CDBIcon, CDBBox } from "cdbreact";
 import LogoApp from "../../../assets/bookworm_icon.svg";
 import { Link } from "react-router-dom";
 
-class Footer extends Component {
-    render() {
+function Footer () {
         return (
             <>
                 <CDBFooter className="shadow">
@@ -17,7 +16,7 @@ class Footer extends Component {
                     >
                         <CDBBox display="flex" alignItems="center">
                             <Link
-                                to="/shopPage"
+                                to="/homePage"
                                 className="d-flex align-items-center p-0 text-dark nav-link"
                             >
                                 <img alt="logo" src={LogoApp} width="30px" />
@@ -45,6 +44,5 @@ class Footer extends Component {
             </>
         );
     }
-}
 
 export default Footer;

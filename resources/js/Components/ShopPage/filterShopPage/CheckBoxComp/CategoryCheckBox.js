@@ -5,7 +5,7 @@ export default function CategoryCheckboxs(props) {
     const [categorys, setCategorys] = React.useState([]);
     useEffect(() => {
         axios
-            .get("http://127.0.0.1:8000/api/categorys")
+            .get("./api/categorys")
             .then((res) => {
                 const datas = res.data;
                 setCategorys(datas);

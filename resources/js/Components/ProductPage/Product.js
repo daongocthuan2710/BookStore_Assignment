@@ -1,15 +1,34 @@
-import React from "react";
-import LogoApp from "../../../assets/bookworm_icon.svg";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 import { bookCover } from "../../datas/bookCover";
-// import { Link } from "react-router-dom";
-import { Row, Col, Container, Form , Button} from "react-bootstrap";
-
+import { Row, Col, Container, Form, Button } from "react-bootstrap";
 
 function ProductPage() {
+    let params = useParams();
+    const [books, setBooks] = useState([]);
+
+    useEffect(() => {
+        axios
+            .get(`./api/books?book_id=${params.id}`)
+            .then((res) => {
+                const datas = res.data.data;
+                setBooks(datas[0]);
+                console.log(datas[0]);
+            })
+            .catch((error) => console.log(error));
+    }, []);
+
     return (
         <>
-            <Container>
-                <Row className="float-start">Category</Row>
+            <Container style={{ paddingTop: "100px" }}>
+                <Row className=" fs-3 mb-5">
+                    <Col md={12}>{books.category_name}</Col>
+                    <Col md={12}>
+                        <hr></hr>
+                    </Col>
+                </Row>
+
                 <Row>
                     <Col md={8}>
                         <div
@@ -18,22 +37,30 @@ function ProductPage() {
                         >
                             <div className="row g-0">
                                 <div className="col-md-4">
-                                    <img
-                                        src={bookCover.book1}
-                                        className="img-fluid rounded-start"
-                                        alt="..."
-                                    />
+                                    <div className="col-md-12">
+                                        <img
+                                            src={
+                                                bookCover[
+                                                    books.book_cover_photo
+                                                ]
+                                            }
+                                            className="img-fluid rounded-start"
+                                            alt="..."
+                                        />
+                                    </div>
+                                    <div className="col-md-12">
+                                        <p className="card-text m-2">
+                                            By(author){books.author_name}
+                                        </p>
+                                    </div>
                                 </div>
                                 <div className="col-md-8">
-                                    <div className="card-body">
-                                        <h5 className="card-title">
-                                            Card title
-                                        </h5>
+                                    <div className="card-body border rounded">
+                                        <h3 className="card-title">
+                                            {books.book_title}
+                                        </h3>
                                         <p className="card-text">
-                                            This is a wider card with supporting
-                                            text below as a natural lead-in to
-                                            additional content. This content is
-                                            a little bit longer.
+                                            {books.book_summary}
                                         </p>
                                         <p className="card-text">
                                             <small className="text-muted">
@@ -47,41 +74,49 @@ function ProductPage() {
                     </Col>
                     <Col md={4}></Col>
                 </Row>
+
                 <Row>
                     <Col md={8}></Col>
                     <Col md={4}>
-                        <Form>
-                            <Form.Group
-                                className="mb-3"
-                                controlId=""
-                            >
+                        <Form className=" p-2 border rounded">
+                            <Form.Group className="mb-3" controlId="">
                                 <Form.Label>Add a title</Form.Label>
-                                <Form.Control
-                                    type=""
-                                />
-
+                                <Form.Control type="" />
                             </Form.Group>
 
                             <Form.Group
                                 className="mb-3"
                                 controlId="formBasicPassword"
                             >
-                                <Form.Label>Details please! Your review helps other shoppers</Form.Label>
-                                <Form.Control
-                                    type="TextField"
-                                />
+                                <Form.Label>
+                                    Details please! Your review helps other
+                                    shoppers
+                                </Form.Label>
+                                <Form.Control type="TextField" />
                             </Form.Group>
                             <Form.Group
                                 className="mb-3"
                                 controlId="formBasicCheckbox"
                             >
-                                <Form.Check
-                                    type="checkbox"
-                                    label="Check me out"
-                                />
+                                <Form.Label>Select a rating star</Form.Label>
+                                <select
+                                    className="form-select"
+                                    aria-label="Default select example"
+                                    defaultValue="1"
+                                >
+                                    <option value="1">1 Star</option>
+                                    <option value="2">2 Star</option>
+                                    <option value="3">3 Star</option>
+                                    <option value="4">4 Star</option>
+                                    <option value="5">5 Star</option>
+                                </select>
                             </Form.Group>
-                            <Button variant="primary" type="submit">
-                                Submit
+                            <Button
+                                className=""
+                                variant="primary"
+                                type="submit"
+                            >
+                                Submit Review
                             </Button>
                         </Form>
                     </Col>

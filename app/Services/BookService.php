@@ -39,7 +39,7 @@ class BookService extends BaseService
     public function filter($request,$perPage)
     {
        $conditions = [
-            'filterCategory' => explode(',',$request->category_id),
+            'filterCategory' => explode(',',substr($request->category_id,1,-1)),
             'filterAuthor' => explode(',',$request->author_id),
             'filterRatingStar' => explode(',',$request->ratingStarValue),
         ];

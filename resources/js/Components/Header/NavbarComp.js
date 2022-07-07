@@ -1,8 +1,8 @@
 import { Navbar, Nav, NavDropdown, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import LogoApp from "../../../assets/bookworm_icon.svg";
-import FiHome from "react-icons/fi";
-import BiCartAlt from "react-icons/bi";
+import {FiHome , BiCartAlt} from "react-icons";
+
 function NavbarComp() {
     return (
         <>
@@ -15,7 +15,7 @@ function NavbarComp() {
             >
                 <Container>
                     <Navbar.Brand>
-                        <Link to="/shopPage" className="nav-link">
+                        <Link to="/homePage" className="nav-link">
                             <img
                                 className="img-responsive"
                                 src={LogoApp}

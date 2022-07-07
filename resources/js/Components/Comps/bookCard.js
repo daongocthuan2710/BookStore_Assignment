@@ -8,7 +8,7 @@ function BookCard(prop) {
         <>
             <Card>
                 <Link
-                    to="/productPage"
+                    to={`/productPage/${prop.book.id}`}
                     params={{ book_id: prop.book.id }}
                     className="nav-link"
                 >
