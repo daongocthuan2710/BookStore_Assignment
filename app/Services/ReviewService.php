@@ -19,11 +19,14 @@ class ReviewService extends BaseService
         {
             $datas = $this->getAll($perPage);
         }
-        // if($request->book_id != null){
-        //     $datas = $this->getByBookId($request->book_id,$perPage);
-        // }
+        if($request->book_id != null){
+            $datas = $this->getByBookId($request->book_id,$perPage);
+        }
         if($request->sortBy != null){
             $datas = $this->sortByBookId($request->sortBy,$request->book_id,$perPage);
+        }
+        if($request->getByStar != null){
+            $datas = $this->getByStar($request->book_id,$request->getByStar,$perPage);
         }
         return $datas;
     }
@@ -50,6 +53,12 @@ class ReviewService extends BaseService
     {
         return $this->_ReviewRepository->getByBookId($id,$perPage);
     }
+
+    public function getByStar($bookId,$star,$perPage)
+    {
+        return $this->_ReviewRepository->getByStar($bookId,$star,$perPage);
+    }
+
     public function filter($conditions,$perPage)
     {
 

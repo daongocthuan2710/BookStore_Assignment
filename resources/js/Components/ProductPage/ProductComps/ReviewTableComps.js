@@ -1,4 +1,3 @@
-import * as React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -7,11 +6,46 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Col, Container, Row } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-export default function ReviewTable() {
-    const currentPage = 1;
-    const totals = 20;
-    const perPage = 5;
+export default function ReviewTable(props) {
+    const [reviews, setReviews] = useState([]);
+
+    const [urls, setUrls] = useState("/api/reviews?getByStar=5&sortBy=&perPage=15");
+    const [totals, settotals] = useState(0);
+    const [perPage, setPerPage] = useState(5);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [star, setStar] = useState(5);
+    const [sorts, setSorts] = useState("newestToOldest");
+    // const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        axios
+            .get(`./api/reviews?book_id=${props.bookId}`)
+            .then((res) => {
+                const datas = res.data;
+                console.log("review", res);
+                setReviews(datas.data);
+                console.log(datas);
+                settotals(datas.total);
+                setPerPage(datas.per_page);
+                setCurrentPage(datas.current_page);
+            })
+            .catch((error) => console.log(error));
+    }, [urls]);
+
+    const onFilterStar = (event) => {
+        setStar(event.target.value);
+    };
+
+    useEffect(() => {
+        setUrls(
+            `/api/reviews?getByStar=${star}&sortBy=${sorts}&perPage=${perPage}`
+        );
+    }, [sorts, perPage, currentPage,star]);
+
+
     return (
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="caption table">
@@ -27,13 +61,24 @@ export default function ReviewTable() {
                                         <span> (Filtered by 5 star)</span>
                                     </Col>
                                     <Col md={12} className="fs-3 fw-bold mt-2">
-                                        <span>4.6</span> <span>Star</span>
-                                    </Col>
-                                    <Col md={12} className="fs-6 mt-2">
-                                        <span className="text-decoration-underline">
-                                            (3,134)
+                                        <span>
+                                            {parseFloat(
+                                                props.avgratingstar
+                                            ).toFixed(1)}
                                         </span>{" "}
+                                        <span>Star</span>
+                                    </Col>
+                                    <Col
+                                        md={12}
+                                        className="fs-6 mt-2 cursor-pointer"
+                                    >
                                         <span className="text-decoration-underline">
+                                            ({totals})
+                                        </span>{" "}
+                                        <span
+                                            onClick={onFilterStar}
+                                            className="text-decoration-underline"
+                                        >
                                             5 star (200) |
                                         </span>{" "}
                                         <span className="text-decoration-underline">
@@ -116,22 +161,21 @@ export default function ReviewTable() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {/* {rows.map((row) => ( */}
+                    {reviews.map((review) => (
                     <TableRow
-                    // key={row.name}
+                    key={review.review_title}
                     >
                         <TableCell component="th" scope="row">
                             <Container>
                                 <Row>
                                     <Col md={12}>
                                         <span className="fs-5 fw-bold mt-2">
-                                            Review Title
+                                            {review.review_title}
                                         </span>{" "}
                                         | <span>5 stars</span>
                                     </Col>
                                     <Col md={12} className="mt-2">
-                                        Consequatur aspernatur iste officiis
-                                        omnis id.
+                                    {review.review_details}
                                     </Col>
                                     <Col md={12} className="mt-2">
                                         April 12, 2021
@@ -140,8 +184,9 @@ export default function ReviewTable() {
                             </Container>
                         </TableCell>
                     </TableRow>
-                    {/* ))} */}
+                    ))}
                 </TableBody>
+
                 <caption>
                     {" "}
                     <Row>

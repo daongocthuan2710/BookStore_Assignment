@@ -25,15 +25,27 @@ class ReviewRepository extends BaseRepository
 
     public function getByBookId($bookId, $perPage)
     {
-        $this->query->selectRaw('book.id,book_title, review_title, review_details, rating_start')
+        $this->query->selectRaw('book.id, review_title, review_details, rating_start, count(book.id) as totals')
         ->rightJoin('book', function ($join) {
             $join->on('book.id', '=', 'review.book_id');
         })
-        ->where('book.id',$bookId);
-        $this->applyPagination($perPage);
-        return $this->query->get();
+        ->where('book.id',$bookId)
+        ->groupBy('book.id','review_title','review_details','rating_start');
+        $this->query->get();
+        return $this->query->paginate($perPage);
     }
 
+
+    public function getByStar($bookId,$star, $perPage)
+    {
+        $this->query->selectRaw('book.id, review_title, review_details, rating_start, count(book.id) as totals')
+        ->where('book.id',$bookId)
+        ->where('rating_start',$star)
+        ->groupBy('book.id','review_title','review_details','rating_start');
+        $this->query->get();
+        return $this->query->paginate($perPage);
+    }
+    
     public function filter($conditions, $perPage)
     {
     
