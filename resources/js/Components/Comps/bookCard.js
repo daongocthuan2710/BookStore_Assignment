@@ -34,12 +34,12 @@ function BookCard(prop) {
                                             <Col>
                                                 {" "}
                                                 <Card.Text className="text-decoration-line-through fs-6">
-                                                    {prop.book.book_price} $
+                                                    ${prop.book.book_price}
                                                 </Card.Text>
                                             </Col>
                                             <Col>
                                                 <Card.Text className="fs-6 text-danger fw-bold">
-                                                    {prop.book.final_price} $
+                                                    ${prop.book.final_price}
                                                 </Card.Text>
                                             </Col>
                                         </Row>
@@ -47,8 +47,8 @@ function BookCard(prop) {
                                 );
                             } else {
                                 return (
-                                    <Card.Text className="fs-6">
-                                        {prop.book.final_price}$
+                                    <Card.Text className="fs-6 fw-bold">
+                                        ${prop.book.final_price}
                                     </Card.Text>
                                 );
                             }

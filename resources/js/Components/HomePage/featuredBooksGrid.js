@@ -3,7 +3,7 @@ import BookCard from "../Comps/bookCard";
 
 function FeaturedBooksGrid(props) {
     return (
-        <Container className="border border-black mt-2">
+        <Container className="border border-black mt-2 pb-5 pr-3 ps-3 pt-3">
             <Row>
                 {props.featured.map((book) => (
                     <Col

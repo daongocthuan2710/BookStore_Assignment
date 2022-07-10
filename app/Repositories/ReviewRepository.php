@@ -25,12 +25,12 @@ class ReviewRepository extends BaseRepository
 
     public function getByBookId($bookId, $perPage)
     {
-        $this->query->selectRaw('book.id, review_title, review_details, rating_start, count(book.id) as totals')
+        $this->query->selectRaw('book.id, review_title, review_details, rating_start,review_date, count(book.id) as totals, avg(rating_start) as avgRatingStar')
         ->rightJoin('book', function ($join) {
             $join->on('book.id', '=', 'review.book_id');
         })
         ->where('book.id',$bookId)
-        ->groupBy('book.id','review_title','review_details','rating_start');
+        ->groupBy('book.id','review_title','review_details','rating_start', 'review_date');
         $this->query->get();
         return $this->query->paginate($perPage);
     }
@@ -38,10 +38,10 @@ class ReviewRepository extends BaseRepository
 
     public function getByStar($bookId,$star, $perPage)
     {
-        $this->query->selectRaw('book.id, review_title, review_details, rating_start, count(book.id) as totals')
-        ->where('book.id',$bookId)
-        ->where('rating_start',$star)
-        ->groupBy('book.id','review_title','review_details','rating_start');
+        $this->query->selectRaw('book_id, count(rating_start) as totals')
+        ->where('book_id',$bookId)
+        ->groupBy('book_id','rating_start')
+        ->having('rating_start',$star);
         $this->query->get();
         return $this->query->paginate($perPage);
     }
@@ -58,19 +58,13 @@ class ReviewRepository extends BaseRepository
                 case 'newestToOldest': 
                     $this->query
                     ->selectRaw('book_title,book_price,rating_start, review_title, review_date ')
-                    ->rightJoin('book', function($join){
-                        $join->on('book.id', '=', 'review.book_id');
-                        })
-                        ->where('book.id' , $book_id)
+                        ->where('book_id' , $book_id)
                     ->orderByRaw('review_date desc nulls last'); 
                     break;
                 case 'oldestToNewest':
                         $this->query
                         ->selectRaw('book_title,book_price,rating_start, review_title, review_date ')
-                        ->rightJoin('book', function($join){
-                            $join->on('book.id', '=', 'review.book_id');
-                            })
-                            ->where('book.id' , $book_id)
+                            ->where('book_id' , $book_id)
                         ->orderByRaw('review_date asc nulls last'); 
                         break;
                     default:

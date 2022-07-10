@@ -30,7 +30,20 @@ function ControlledCarousel() {
                 className="border border-black mt-2"
                 modules={[Navigation, Pagination, Autoplay]}
                 spaceBetween={-60}
-                slidesPerView={4}
+                breakpoints={{
+                    300: {
+                          slidesPerView: 1,
+                        },
+                    576: {
+                      slidesPerView: 2,
+                    },
+                    992: {
+                      slidesPerView: 3,
+                    },
+                    1200: {
+                          slidesPerView: 4,
+                        },
+                  }}
                 navigation
                 pagination={{ clickable: true }}
                 autoplay={{

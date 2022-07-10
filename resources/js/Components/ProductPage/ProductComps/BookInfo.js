@@ -1,4 +1,3 @@
-// import React from "react";
 import { bookCover } from "../../../datas/bookCover";
 
 function BookInfo(props) {

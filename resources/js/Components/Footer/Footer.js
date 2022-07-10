@@ -1,48 +1,24 @@
 import React from "react";
-import { CDBFooter, CDBBtn, CDBIcon, CDBBox} from "cdbreact";
-import LogoApp from "../../../assets/bookworm_icon.svg";
 import { Link } from "react-router-dom";
+import LogoApp from "../../../assets/bookworm_icon.svg";
+ function Footer () {
+    return (
+        <footer className="bg-light text-center text-white mt-5">
 
-function Footer () {
-        return (
-            <>
-                <CDBFooter className="shadow">
-                    <CDBBox
-                        display="flex"
-                        justifyContent="between"
-                        alignItems="center"
-                        className="mx-auto py-4 flex-wrap"
-                        style={{ width: "80%" }}
-                    >
-                        <CDBBox display="flex" alignItems="center">
-                            <Link
-                                to="/homePage"
-                                className="d-flex align-items-center p-0 text-dark nav-link"
-                            >
-                                <img alt="logo" src={LogoApp} width="30px" />
-                                <span className="ml-4 h5 mb-0 font-weight-bold">
-                                    Devwares
-                                </span>
-                            </Link>
-                            <small className="ml-2">
-                                &copy; Devwares, 2022. All rights reserved.
-                            </small>
-                        </CDBBox>
-                        <CDBBox display="flex">
-                            <CDBBtn flat color="dark" className="p-2">
-                                <CDBIcon fab icon="facebook-f" />
-                            </CDBBtn>
-                            <CDBBtn flat color="dark" className="mx-3 p-2">
-                                <CDBIcon fab icon="twitter" />
-                            </CDBBtn>
-                            <CDBBtn flat color="dark" className="p-2">
-                                <CDBIcon fab icon="instagram" />
-                            </CDBBtn>
-                        </CDBBox>
-                    </CDBBox>
-                </CDBFooter>
-            </>
-        );
-    }
-
+            <div
+                className="text-center p-3"
+                style={{backgroundColor: "rgba(0, 0, 0, 0.2)"}}
+            >
+                thuandao2710@gmail.com 0825015***
+                <Link to="/homePage" className="nav-link">
+                            <img
+                                className="img-responsive"
+                                src={LogoApp}
+                                alt="logo"
+                            />
+                        </Link>
+            </div>
+        </footer>
+    );
+};
 export default Footer;

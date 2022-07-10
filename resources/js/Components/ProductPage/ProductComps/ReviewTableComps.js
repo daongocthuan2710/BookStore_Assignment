@@ -8,43 +8,114 @@ import Paper from "@mui/material/Paper";
 import { Col, Container, Row } from "react-bootstrap";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import TextRating from "../../Comps/RatingStar";
+import moment from "moment";
 
 export default function ReviewTable(props) {
     const [reviews, setReviews] = useState([]);
 
-    const [urls, setUrls] = useState("/api/reviews?getByStar=5&sortBy=&perPage=15");
+    const [urls, setUrls] = useState(`./api/reviews?book_id=${props.bookId}`);
     const [totals, settotals] = useState(0);
     const [perPage, setPerPage] = useState(5);
     const [currentPage, setCurrentPage] = useState(1);
-    const [star, setStar] = useState(5);
-    const [sorts, setSorts] = useState("newestToOldest");
-    // const [loading, setLoading] = useState(false);
+    const [sorts, setSorts] = useState("");
 
+    const [star1, setStar1] = useState(0);
+    const [star2, setStar2] = useState(0);
+    const [star3, setStar3] = useState(0);
+    const [star4, setStar4] = useState(0);
+    const [star5, setStar5] = useState(0);
+    const [star, setStar] = useState(5);
+    const [filterText, setfilterText] = useState(5);
     useEffect(() => {
+        // Get all reviews with book_id
         axios
-            .get(`./api/reviews?book_id=${props.bookId}`)
+            .get(`./api/reviews?book_id=${props.bookId}&getByStar=${star}`)
             .then((res) => {
                 const datas = res.data;
-                console.log("review", res);
+                console.log("review_root");
                 setReviews(datas.data);
-                console.log(datas);
                 settotals(datas.total);
                 setPerPage(datas.per_page);
                 setCurrentPage(datas.current_page);
             })
             .catch((error) => console.log(error));
-    }, [urls]);
-
-    const onFilterStar = (event) => {
-        setStar(event.target.value);
-    };
+    }, [star]);
 
     useEffect(() => {
-        setUrls(
-            `/api/reviews?getByStar=${star}&sortBy=${sorts}&perPage=${perPage}`
-        );
-    }, [sorts, perPage, currentPage,star]);
+        // Get all reviews with book_id
+        axios
+            .get(urls)
+            .then((res) => {
+                const datas = res.data;
+                console.log("review1");
+                setReviews(datas.data);
+            })
+            .catch((error) => console.log(error));
+    }, [urls]);
 
+    useEffect(() => {
+        // get totals review having rating 1 star
+        axios
+            .get(`./api/reviews?book_id=${props.bookId}&getByStar=1`)
+            .then((res) => {
+                setStar1(res.data.total);
+            })
+            .catch((error) => console.log(error));
+
+        // get totals review having rating 2 star
+        axios
+            .get(`./api/reviews?book_id=${props.bookId}&getByStar=2`)
+            .then((res) => {
+                setStar2(res.data.total);
+            })
+            .catch((error) => console.log(error));
+
+        // get totals review having rating 3 star
+        axios
+            .get(`./api/reviews?book_id=${props.bookId}&getByStar=3`)
+            .then((res) => {
+                setStar3(res.data.total);
+            })
+            .catch((error) => console.log(error));
+
+        // get totals review having rating 4 star
+        axios
+            .get(`./api/reviews?book_id=${props.bookId}&getByStar=4`)
+            .then((res) => {
+                setStar4(res.data.total);
+            })
+            .catch((error) => console.log(error));
+
+        // get totals review having rating 5 star
+        axios
+            .get(`./api/reviews?book_id=${props.bookId}&getByStar=5`)
+            .then((res) => {
+                setStar5(res.data.total);
+            })
+            .catch((error) => console.log(error));
+    }, []);
+
+    const onFilterStar = (event) => {
+        setStar(event.target.attributes.value.value);
+        setfilterText(event.target.attributes.value.value);
+    };
+
+    const onChangShowPage = (event) => {
+        setPerPage(event.target.value);
+    };
+
+    const onChangeSort = (event) => {
+        setSorts(event.target.value);
+    };
+
+
+    useEffect(() => {
+        console.log("review2");
+        setUrls(
+            `/api/reviews?book_id=${props.bookId}&sortBy=${sorts}&getByStar=${star}&perPage=${perPage}&page=${currentPage}`
+        );
+    }, [sorts, perPage, currentPage]);
 
     return (
         <TableContainer component={Paper}>
@@ -58,50 +129,101 @@ export default function ReviewTable(props) {
                                         <span className="fs-5 fw-bold">
                                             Customer Reviews
                                         </span>
-                                        <span> (Filtered by 5 star)</span>
+                                        <span>
+                                            {" "}
+                                            (Filtered by{" "}
+                                            {(() => {
+                                                return filterText == ""
+                                                    ? "all"
+                                                    : filterText;
+                                            })()}{" "}
+                                            star)
+                                        </span>
                                     </Col>
                                     <Col md={12} className="fs-3 fw-bold mt-2">
                                         <span>
-                                            {parseFloat(
-                                                props.avgratingstar
-                                            ).toFixed(1)}
+                                            {(() => {
+                                                return props.avgratingstar ==
+                                                    null
+                                                    ? 0
+                                                    : parseFloat(
+                                                          props.avgratingstar
+                                                      ).toFixed(1);
+                                            })()}
                                         </span>{" "}
                                         <span>Star</span>
                                     </Col>
                                     <Col
                                         md={12}
-                                        className="fs-6 mt-2 cursor-pointer"
+                                        className="fs-6 mt-2 cursor-default"
                                     >
-                                        <span className="text-decoration-underline">
-                                            ({totals})
+                                        <span
+                                            onClick={onFilterStar}
+                                            className="text-decoration-underline cursor-pointer"
+                                            value=""
+                                        >
+                                            (
+                                            {star1 +
+                                                star2 +
+                                                star3 +
+                                                star4 +
+                                                star5}
+                                            )
                                         </span>{" "}
                                         <span
                                             onClick={onFilterStar}
-                                            className="text-decoration-underline"
+                                            className="text-decoration-underline cursor-pointer"
+                                            value={5}
                                         >
-                                            5 star (200) |
+                                            5 star ({star5}) |
                                         </span>{" "}
-                                        <span className="text-decoration-underline">
-                                            3 star (20) |
+                                        <span
+                                            onClick={onFilterStar}
+                                            className="text-decoration-underline cursor-pointer"
+                                            value={4}
+                                        >
+                                            4 star ({star4}) |
                                         </span>{" "}
-                                        <span className="text-decoration-underline">
+                                        <span
+                                            className="text-decoration-underline cursor-pointer"
+                                            onClick={onFilterStar}
+                                            value={3}
+                                        >
+                                            3 star ({star3}) |
+                                        </span>{" "}
+                                        <span
+                                            className="text-decoration-underline cursor-pointer"
+                                            onClick={onFilterStar}
+                                            value={2}
+                                        >
                                             {" "}
-                                            2 star (5) |
+                                            2 star ({star2}) |
                                         </span>{" "}
-                                        <span className="text-decoration-underline">
-                                            1 star (0)
+                                        <span
+                                            className="text-decoration-underline cursor-pointer"
+                                            onClick={onFilterStar}
+                                            value={1}
+                                        >
+                                            1 star ({star1})
                                         </span>{" "}
                                     </Col>
                                     <Col md={12} className="mt-2">
                                         <Row>
                                             <Col>
-                                                Showing 1 - 12 of 3134 reviews
+                                                Showing{" "}
+                                                {currentPage * perPage -
+                                                    perPage}{" "}
+                                                -{" "}
+                                                {currentPage * perPage <= totals
+                                                    ? currentPage * perPage
+                                                    : totals}{" "}
+                                                of {totals} reviews
                                             </Col>
                                             <Col>
                                                 <Row>
                                                     <Col>
                                                         <select
-                                                            // onChange={props.onChangeSort}
+                                                            onChange={onChangeSort}
                                                             defaultValue="newestToOldest"
                                                             className="form-select"
                                                             aria-label="Default select example"
@@ -119,7 +241,7 @@ export default function ReviewTable(props) {
                                                     <Col>
                                                         {" "}
                                                         <select
-                                                            // onChange={props.onChangShowPage}
+                                                            onChange={onChangShowPage}
                                                             defaultValue="5"
                                                             className="form-select"
                                                             aria-label="Default select example"
@@ -146,7 +268,16 @@ export default function ReviewTable(props) {
                                         <span className="fs-5 fw-bold mt-2">
                                             Review Title
                                         </span>{" "}
-                                        | <span>5 stars</span>
+                                        |{" "}
+                                        <span>
+                                            {" "}
+                                            {(() => {
+                                                return filterText == ""
+                                                    ? "all"
+                                                    : filterText;
+                                            })()}{" "}
+                                            stars
+                                        </span>
                                     </Col>
                                     <Col md={12} className="mt-2">
                                         Consequatur aspernatur iste officiis
@@ -161,30 +292,40 @@ export default function ReviewTable(props) {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {reviews.map((review) => (
-                    <TableRow
-                    key={review.review_title}
-                    >
-                        <TableCell component="th" scope="row">
-                            <Container>
-                                <Row>
-                                    <Col md={12}>
-                                        <span className="fs-5 fw-bold mt-2">
-                                            {review.review_title}
-                                        </span>{" "}
-                                        | <span>5 stars</span>
-                                    </Col>
-                                    <Col md={12} className="mt-2">
-                                    {review.review_details}
-                                    </Col>
-                                    <Col md={12} className="mt-2">
-                                        April 12, 2021
-                                    </Col>
-                                </Row>
-                            </Container>
-                        </TableCell>
-                    </TableRow>
-                    ))}
+                    <Row>
+                        {reviews.map((review) => (
+                            <TableRow key={review.review_title}>
+                                <TableCell component="th" scope="row">
+                                    <Container>
+                                        <Row>
+                                            <Col md={12}>
+                                                <span className="fs-5 fw-bold mt-2">
+                                                    <Row className="ms-2">
+                                                        {review.review_title}
+                                                        {
+                                                            <TextRating
+                                                                value={
+                                                                    review.rating_start
+                                                                }
+                                                            />
+                                                        }
+                                                    </Row>
+                                                </span>
+                                            </Col>
+                                            <Col md={12} className="mt-2">
+                                                {review.review_details}
+                                            </Col>
+                                            <Col md={12} className="mt-2">
+                                                {moment(
+                                                    review.review_date
+                                                ).format("MMM DD, YYYY")}
+                                            </Col>
+                                        </Row>
+                                    </Container>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </Row>
                 </TableBody>
 
                 <caption>
@@ -194,9 +335,7 @@ export default function ReviewTable(props) {
                             <button
                                 className="btn btn-outline-secondary me-2"
                                 disabled={currentPage == 1}
-                                // onClick={() =>
-                                //     setCurrentPage(currentPage - 1)
-                                // }
+                                onClick={() => setCurrentPage(currentPage - 1)}
                                 style={
                                     Math.ceil(totals / perPage) < 2
                                         ? { display: "none" }
@@ -212,9 +351,7 @@ export default function ReviewTable(props) {
                                         ? { display: "none" }
                                         : {}
                                 }
-                                // onClick={() =>
-                                // setCurrentPage(currentPage - 1)
-                                // }
+                                onClick={() => setCurrentPage(currentPage - 1)}
                             >
                                 {currentPage - 1}
                             </button>
@@ -230,18 +367,15 @@ export default function ReviewTable(props) {
                                 {currentPage}
                             </button>
                             <button
-                                disabled={
-                                    currentPage == Math.ceil(totals / perPage)
-                                }
                                 style={
-                                    Math.ceil(totals / perPage) < 2
+                                    Math.ceil(totals / perPage) < 2 ||
+                                    currentPage - Math.ceil(totals / perPage) ==
+                                        0
                                         ? { display: "none" }
                                         : {}
                                 }
                                 className="btn btn-outline-secondary me-2"
-                                // onClick={() =>
-                                // setCurrentPage(currentPage + 1)
-                                // }
+                                onClick={() => setCurrentPage(currentPage + 1)}
                             >
                                 {currentPage + 1}
                             </button>
@@ -255,9 +389,7 @@ export default function ReviewTable(props) {
                                         ? { display: "none" }
                                         : {}
                                 }
-                                // onClick={() =>
-                                // setCurrentPage(currentPage + 1)
-                                // }
+                                onClick={() => setCurrentPage(currentPage + 1)}
                             >
                                 Next
                             </button>

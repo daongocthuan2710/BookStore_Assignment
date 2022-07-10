@@ -37,10 +37,10 @@ function HomePage() {
         <>
             <Container style={{ paddingTop: "100px" }}>
                 <Row>
-                    <Col xs={2} md={2}>
+                    <Col xs={4} md={4}>
                         <span className="fs-3">On Sale</span>
                     </Col>
-                    <Col xs={8} md={8}></Col>
+                    <Col xs={6} md={6}></Col>
                     <Col xs={2} className="text-end">
                         <Button variant="info" className="ml-5">
                             <Link to="/shopPage" className="nav-link">

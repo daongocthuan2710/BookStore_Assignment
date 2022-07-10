@@ -96,8 +96,9 @@ function FormAddToCart(props) {
                     style={{ width: "100%" }}
                     variant="primary"
                     type="submit"
+                    onClick = {props.addToCart}
                 >
-                    Add To Card
+                    Add To Cart
                 </Button>
             </Form.Group>
         </Form>
