@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Row, Col, Container } from "react-bootstrap";
 import { Form, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { bookCover } from "../../datas/bookCover";
-
+import { useNavigate } from "react-router-dom";
 
 function CartPage() {
     var totalItem = 0;
@@ -51,10 +51,8 @@ function CartPage() {
                 index = i;
             }}
             );
-            
-            console.log('index',index);
+        
             cart.splice(index, 1);
-            console.log('cart',cart);
             localStorage.setItem("cart", JSON.stringify(cart));
             setCart(cart);
             setTimeout(function(){
@@ -62,6 +60,17 @@ function CartPage() {
              }, 100);
 
             
+        }
+
+    }
+    let navigate = useNavigate();
+    const checkUser = () => {
+        const user = JSON.parse(localStorage.getItem("user")) || undefined;
+        if(user){
+
+        }
+        else{
+            navigate("/loginPage");
         }
     };
 
@@ -209,7 +218,7 @@ function CartPage() {
                                 <Button
                                     style={{ width: "100%" }}
                                     variant="primary"
-                                    type="submit"
+                                    onClick = {checkUser}
                                 >
                                     Place order
                                 </Button>

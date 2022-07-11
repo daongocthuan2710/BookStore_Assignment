@@ -14,8 +14,8 @@ import '../css/app.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import CartPage from './Components/Cart/cartPage';
 import Login from './Components/Login/Login';
-
 ReactDOM.render(
+    
     <HashRouter>
         <Header/>
         <Routes>
@@ -25,11 +25,12 @@ ReactDOM.render(
             <Route path="/cartPage" element={<CartPage/>}></Route>
             <Route path="/productPage/:id" element={<Products/>}></Route>
             <Route path="/aboutPage" element={<About/>}></Route>
-            <Route path="/loginPage" element={<Welcome/>}></Route>
+            <Route path="/loginPage" element={<Login/>}></Route>
+            
         </Routes> 
     <Footer/>
     </HashRouter>
-    // <Login/>
+    
   ,document.getElementById('root')
 );
 

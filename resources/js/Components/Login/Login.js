@@ -1,80 +1,84 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState} from "react";
+import axios from "axios";
+import "../../../css/app.css";
+import { useNavigate } from "react-router-dom";
+
 function Login() {
+    const [email,setEmail] = useState('');
+    const [pass,setPass] = useState('');
+
+    let navigate = useNavigate();
+
+    const handleSubmitLogin = (e) => {
+        e.preventDefault();
+        axios.get(`http://127.0.0.1:8000/api/users?email=${email}&password=${pass}`)
+          .then(function (response) {
+            if(response.data.length > 0){
+                localStorage.setItem("user", JSON.stringify(response.data[0]));
+                navigate("/homePage");
+            }
+            else{
+                alert('Login failed!');
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    }
+
     return (
         <>
-            <div
-                className="modal fade"
-                id="modalLoginForm"
-                tabIndex="-1"
-                role="dialog"
-                aria-labelledby="myModalLabel"
-                aria-hidden="true"
-            >
-                <div className="modal-dialog" role="document">
-                    <div className="modal-content">
-                        <div className="modal-header text-center">
-                            <h4 className="modal-title w-100 font-weight-bold">
-                                Sign in
-                            </h4>
-                            <button
-                                type="button"
-                                className="close"
-                                data-dismiss="modal"
-                                aria-label="Close"
-                            >
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div className="modal-body mx-3">
-                            <div className="md-form mb-5">
-                                <i className="fas fa-envelope prefix grey-text"></i>
-                                <input
-                                    type="email"
-                                    id="defaultForm-email"
-                                    className="form-control validate"
-                                />
-                                <label
-                                    data-error="wrong"
-                                    data-success="right"
-                                    htmlFor="defaultForm-email"
-                                >
-                                    Your email
-                                </label>
-                            </div>
-
-                            <div className="md-form mb-4">
-                                <i className="fas fa-lock prefix grey-text"></i>
-                                <input
-                                    type="password"
-                                    id="defaultForm-pass"
-                                    className="form-control validate"
-                                />
-                                <label
-                                    data-error="wrong"
-                                    data-success="right"
-                                    htmlFor="defaultForm-pass"
-                                >
-                                    Your password
-                                </label>
-                            </div>
-                        </div>
-                        <div className="modal-footer d-flex justify-content-center">
-                            <button className="btn btn-default">Login</button>
-                        </div>
+        <div className = "d-flex justify-content-center align-items-center vh-100 border rounded ">
+            <form>
+                <div className="mb-3">
+                
+                    <div id="emailHelp" className="form-text">
+                        We'll never share your email with anyone else.
                     </div>
                 </div>
-            </div>
-
-            <div className="text-center">
-                <Link
-                    to={``}
-                    className="btn btn-default btn-rounded mb-4"
-                    data-toggle="modal"
-                    data-target="#modalLoginForm"
-                >
-                    Launch Modal Login Form
-                </Link>
+                <div className="mb-3">
+                    <label htmlFor="exampleInputEmail1" className="form-label">
+                        Email address
+                    </label>
+                    <input
+                        type="email"
+                        className="form-control"
+                        id="exampleInputEmail1"
+                        aria-describedby="emailHelp"
+                        onChange = {(e)=>  setEmail(e.target.value)}
+                    />
+                    <div id="emailHelp" className="form-text">
+                        We'll never share your email with anyone else.
+                    </div>
+                </div>
+                <div className="mb-3">
+                    <label
+                        htmlFor="exampleInputPassword1"
+                        className="form-label"
+                    >
+                        Password
+                    </label>
+                    <input
+                        type="password"
+                        className="form-control"
+                        id="exampleInputPassword1"
+                        onChange = {(e)=>setPass(e.target.value)}
+                    />
+                </div>
+                <div className="mb-3 form-check">
+                    <input
+                        type="checkbox"
+                        className="form-check-input"
+                        id="exampleCheck1"
+                    />
+                    <label className="form-check-label" htmlFor="exampleCheck1">
+                        Check me out
+                    </label>
+                </div>
+                <button type="submit" onClick = {handleSubmitLogin} className="btn btn-primary">
+                    Submit
+                </button>
+            </form>
             </div>
         </>
     );
