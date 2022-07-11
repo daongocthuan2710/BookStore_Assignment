@@ -22,7 +22,7 @@ function ShopPage() {
     const onChangeSort = (event) => {
         setSorts(event.target.value);
     };
-
+    console.log("reload");
     const onChangeCategory = (event) => {
         if (event.target.checked == true) {
             setCategorys(categorys + "," + event.target.value);
@@ -174,12 +174,14 @@ function ShopPage() {
                                     {currentPage}
                                 </button>
                                 <button
-                                    disabled={
-                                        currentPage ==
-                                        Math.ceil(totals / perPage)
-                                    }
+                                    // disabled={
+                                    //     currentPage ==
+                                    //     Math.ceil(totals / perPage)
+                                    // }
                                     style={
-                                        Math.ceil(totals / perPage) < 2
+                                        Math.ceil(totals / perPage) < 2 ||
+                                        currentPage - Math.ceil(totals / perPage) ==
+                                            0
                                             ? { display: "none" }
                                             : {}
                                     }

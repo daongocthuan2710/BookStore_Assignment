@@ -16,7 +16,7 @@ import CartPage from './Components/Cart/cartPage';
 
 ReactDOM.render(
     <HashRouter>
-        {<Header/>}
+        <Header/>
         <Routes>
             <Route path="/" element={<HomePage/>}></Route>
             <Route path="/homePage" element={<HomePage/>}></Route>
@@ -25,7 +25,6 @@ ReactDOM.render(
             <Route path="/productPage/:id" element={<Products/>}></Route>
             <Route path="/aboutPage" element={<About/>}></Route>
             <Route path="/loginPage" element={<Welcome/>}></Route>
-            
         </Routes> 
     <Footer/>
     </HashRouter>

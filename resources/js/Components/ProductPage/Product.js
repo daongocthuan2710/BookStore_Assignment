@@ -17,31 +17,54 @@ function Products() {
             .then((res) => {
                 const datas = res.data.data;
                 setBooks(datas[0]);
-
             })
             .catch((error) => console.log(error));
     }, []);
 
+    function tempAlert(msg, duration) {
+        var el = document.createElement("div");
+        el.setAttribute(
+            "style",
+            "position:absolute;top:15%;left:50%;background-color:green; font-size:20px"
+        );
+        el.innerHTML = msg;
+        setTimeout(function () {
+            el.parentNode.removeChild(el);
+        }, duration);
+        document.body.appendChild(el);
+    }
+
     // Thêm sản phẩm vào giỏ hàng
-    const addToCart = (e) =>{
-        let newLocalStorageArray = []; // Tạo mảng mới để cập nhật mảng lên localstorage
-        let preLocalStorageArray = JSON.parse(localStorage.getItem('cart')); // Lấy dữ liệu mảng localstorage trước đó
-        let quantityBookInfo = []; // thông tin sách và số lượng
-        let quantityBookInfoArray = []; // lưu thông tin sách vào mảng
+    const addToCart = (e) => {
+        let preLocalStorageArray =
+            JSON.parse(localStorage.getItem("cart")) || []; // Lấy dữ liệu mảng localstorage trước đó
         let quantity = Number.parseInt(e.target.form[1].value);
 
-        quantityBookInfo.push(books);
-        quantityBookInfo.push(quantity);
+        let isDuplicate = false;
+        const quantityBookInfo = Object.assign(books, { quantity: quantity });
 
-        quantityBookInfoArray.push(quantityBookInfo);
-        if(preLocalStorageArray != null){
-            newLocalStorageArray = preLocalStorageArray.concat(quantityBookInfoArray);
-        }else{
-            newLocalStorageArray = quantityBookInfoArray;
+        preLocalStorageArray = preLocalStorageArray.map((item) => {
+            if (item.id === bookId) {
+                isDuplicate = true;
+                return {
+                    ...item,
+                    quantity:
+                        item.quantity + quantity > 8
+                            ? 8
+                            : item.quantity + quantity,
+                };
+            } else {
+                return item;
+            }
+        });
+
+        if (!isDuplicate) {
+            preLocalStorageArray.push(quantityBookInfo);
         }
-        // console.log('newArray',newLocalStorageArray);
-        localStorage.setItem("cart", JSON.stringify(newLocalStorageArray));
-    }
+        localStorage.setItem("cart", JSON.stringify(preLocalStorageArray));
+
+        return tempAlert('Successful Adding!', 1000);
+    };
 
     return (
         <>
@@ -55,10 +78,10 @@ function Products() {
 
                 <Row>
                     <Col md={8} className="bg-light">
-                        <BookInfo books={books} book_id = {bookId} />
+                        <BookInfo books={books} book_id={bookId} />
                     </Col>
                     <Col md={4}>
-                        <FormAddToCart books={books} addToCart = {addToCart} />
+                        <FormAddToCart books={books} addToCart={addToCart} />
                     </Col>
                 </Row>
 
@@ -70,7 +93,7 @@ function Products() {
                         />
                     </Col>
                     <Col md={4}>
-                        <FormSubmit />
+                        <FormSubmit bookId={bookId} />
                     </Col>
                 </Row>
             </Container>

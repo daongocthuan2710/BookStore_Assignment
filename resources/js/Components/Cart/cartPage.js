@@ -1,50 +1,60 @@
 import React, { useState, useEffect } from "react";
-// import { Row, Col, Container } from "react-bootstrap";
-// import { Form, Button, Card } from "react-bootstrap";
-// import { bookCover } from "../../datas/bookCover";
-
-// import axios from "axios";
-// import { Row, Col, Container } from "react-bootstrap";
-// import ReviewTable from "./ProductComps/ReviewTableComps";
-// import BookInfo from "./ProductComps/BookInfo";
-// import FormSubmit from "./ProductComps/FormSubmit";
-// import FormAddToCart from "./ProductComps/FormAddToCart";
+import { Row, Col, Container } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
+import { bookCover } from "../../datas/bookCover";
 
 function CartPage() {
-    // const [cart, setCart] = useState([]);
-    // setCart(JSON.parse(localStorage.getItem("cart")));
-    // console.log(cart);
-    // var totalPrice = 0;
+    const [cart, setCart] = useState(
+        JSON.parse(localStorage.getItem("cart")) || []
+    );
 
-    // const incrementValue = (e) => {
-    //     e.preventDefault();
-    //     console.log(e);
-    //     let currentVal = Number.parseInt(e.target.form[1].value);
-    //     if (!isNaN(currentVal) && currentVal >= 0) {
-    //         if (currentVal < 8) {
-    //             e.target.form[1].value = currentVal + 1;
-    //         } else {
-    //             e.target.form[1].value = 8;
-    //         }
-    //     } else {
-    //         e.target.form[1].value = 0;
-    //     }
-    // };
+    console.log("cart", cart);
+    var totalPrice = 0;
 
-    // const handleIncrement = (card_id) => {
-    //     setCart((cart) =>
-    //         cart.map((item) =>
-    //             card_id === item[0].id
-    //                 ? { ...item, product_qty: item[1] + 1 }
-    //                 : item
-    //         )
-    //     );
-    // };
+    const handleIncrement = (e) => {
+        console.log(e);
+        let currentVal = Number.parseInt(e.target.form[1].value);
+        if (!isNaN(currentVal) && currentVal >= 0) {
+            if (currentVal < 8) {
+                e.target.form[1].value = currentVal + 1;
+                const cartTmp = cart.map((item) =>
+                    item.id === bookId ? { ...item, quantity: item.quantity + 1 } : item
+                );
+                localStorage.setItem("cart", JSON.stringify(cartTmp));
+                setCart(cartTmp);
+            } else {
+                e.target.form[1].value = 8;
+            }
+        } else {
+            e.target.form[1].value = 0;
+        }
+    };
+
+    const handleDecrement = (e) => {
+        console.log(e);
+        console.log("Id",e.target.id);
+        let currentVal = Number.parseInt(e.target.form[1].value);
+        if (!isNaN(currentVal) && currentVal > 0) {
+            e.target.form[1].value = currentVal - 1;
+            console.log(e.target.form[1].value);
+            const cartTmp = cart.map((item) =>
+                item.id === e.target.id
+                    ? { ...item, quantity: item.quantity - 1 }
+                    : item
+            );
+            // console.log("CardtmpId", cartTmp[e.target.id]);
+            console.log("Cardtmp", cartTmp);
+            localStorage.setItem("cart", JSON.stringify(cartTmp));
+            setCart(cartTmp);
+        } else {
+            e.target.form[1].value = 0;
+        }
+        console.log("eee",e.target.form[1].value);
+    };
 
     return (
         <>
-        <div>aa</div>
-            {/* <Container style={{ paddingTop: "100px" }}>
+            <Container style={{ paddingTop: "100px" }}>
                 <Row className=" fs-3 mb-5">
                     <Col md={12}>Your cart: 3 items</Col>
                     <Col md={12}>
@@ -76,7 +86,7 @@ function CartPage() {
                                                         <img
                                                             src={
                                                                 bookCover[
-                                                                    item[0]
+                                                                    item
                                                                         .book_cover_photo
                                                                 ]
                                                             }
@@ -89,14 +99,12 @@ function CartPage() {
                                                         <div className="card-body text-center">
                                                             <h3 className="card-title text-truncate">
                                                                 {
-                                                                    item[0]
-                                                                        .book_title
+                                                                    item.book_title
                                                                 }
                                                             </h3>
                                                             <h5 className="card-title">
                                                                 {
-                                                                    item[0]
-                                                                        .author_name
+                                                                    item.author_name
                                                                 }
                                                             </h5>
                                                         </div>
@@ -104,7 +112,7 @@ function CartPage() {
                                                 </div>
                                             </div>
                                         </th>
-                                        <td>${item[0].final_price}</td>
+                                        <td>${item.final_price}</td>
                                         <td>
                                             <Form>
                                                 <Form.Group
@@ -117,29 +125,31 @@ function CartPage() {
                                                             value="-"
                                                             className="button-minus border rounded-circle  icon-shape icon-sm mx-1 "
                                                             data-field="quantity"
-                                                            onClick={handleDecrement(
-                                                                item[0].id
-                                                            )}
+                                                            id={item.id}
+                                                            onClick={
+                                                                handleDecrement
+                                                            }
                                                         />
                                                         <input
                                                             type="number"
                                                             step="1"
                                                             min="1"
                                                             max="8"
-                                                            defaultValue={
-                                                                item[1]
-                                                            }
                                                             name="quantity"
                                                             className="quantity-field border-0 text-center w-25"
+                                                            value={
+                                                                item.quantity
+                                                            }
                                                         />
                                                         <input
                                                             type="button"
                                                             value="+"
+                                                            id={item.id}
                                                             className="button-plus border rounded-circle icon-shape icon-sm "
                                                             data-field="quantity"
-                                                            onClick={handleIncrement(
-                                                                item[0].id
-                                                            )}
+                                                            onClick={
+                                                                handleIncrement
+                                                            }
                                                         />
                                                     </div>
                                                 </Form.Group>
@@ -148,10 +158,14 @@ function CartPage() {
                                         {(() => {
                                             totalPrice =
                                                 totalPrice +
-                                                item[0].final_price * item[1];
+                                                item.final_price *
+                                                    item.quantity;
                                         })()}
                                         <td>
-                                            ${item[0].final_price * item[1]}
+                                            $
+                                            {parseFloat(
+                                                item.final_price * item.quantity
+                                            ).toFixed(1)}
                                         </td>
                                     </tr>
                                 ))}
@@ -171,7 +185,7 @@ function CartPage() {
                                 className="mb-3 text-center fs-3"
                             >
                                 <Form.Label className="mb-3 fs-4 fw-bold">
-                                    ${totalPrice}
+                                    ${parseFloat(totalPrice).toFixed(1)}
                                 </Form.Label>
                             </Form.Group>
                             <Form.Group className="text-center">
@@ -186,7 +200,7 @@ function CartPage() {
                         </Form>
                     </Col>
                 </Row>
-            </Container> */}
+            </Container>
         </>
     );
 }

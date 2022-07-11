@@ -25,15 +25,14 @@ export default function ReviewTable(props) {
     const [star3, setStar3] = useState(0);
     const [star4, setStar4] = useState(0);
     const [star5, setStar5] = useState(0);
-    const [star, setStar] = useState(5);
-    const [filterText, setfilterText] = useState(5);
+    const [star, setStar] = useState('');
+    const [filterText, setfilterText] = useState('all');
     useEffect(() => {
         // Get all reviews with book_id
         axios
             .get(`./api/reviews?book_id=${props.bookId}&getByStar=${star}`)
             .then((res) => {
                 const datas = res.data;
-                console.log("review_root");
                 setReviews(datas.data);
                 settotals(datas.total);
                 setPerPage(datas.per_page);
@@ -48,7 +47,6 @@ export default function ReviewTable(props) {
             .get(urls)
             .then((res) => {
                 const datas = res.data;
-                console.log("review1");
                 setReviews(datas.data);
             })
             .catch((error) => console.log(error));
@@ -111,7 +109,6 @@ export default function ReviewTable(props) {
 
 
     useEffect(() => {
-        console.log("review2");
         setUrls(
             `/api/reviews?book_id=${props.bookId}&sortBy=${sorts}&getByStar=${star}&perPage=${perPage}&page=${currentPage}`
         );

@@ -11,4 +11,10 @@ class Review extends Model
 
     public $timestamps = false;
     protected $table = 'review';
+        protected $filltable = [
+        'book_id',
+        'review_title',
+        'rating_start',
+        'review_details'
+    ];
 }

@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Rating from "@mui/material/Rating";
 import StarIcon from "@mui/icons-material/Star";
 
-export default function TextRating(props) {
+export default function TextRating(props) { 
     return (
             <Box
                 sx={{
