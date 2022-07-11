@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Row, Col, Container } from "react-bootstrap";
 import { Form, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import { bookCover } from "../../datas/bookCover";
 
 
@@ -43,10 +44,8 @@ function CartPage() {
             localStorage.setItem("cart", JSON.stringify(cartTmp));
             setCart(cartTmp);
         } else {
-            // e.target.form[1].value = 0;
             console.log('cart',cart);
             let index = 0;
-            //   let cartTotals = JSON.parse(localStorage.getItem("cart")) || [];
             cart.map((item, i) =>
             {if(item.id == e.target.id){
                 index = i;
@@ -98,7 +97,10 @@ function CartPage() {
                                             >
                                                 <div className="row g-0">
                                                     <div className="col-md-5">
-                                                        <img
+                                                        <Link to={`/productPage/${item.id}`}
+                                                            params={{ book_id: item.id }}
+                                                            className="nav-link" target="_blank">
+                                                     <img
                                                             src={
                                                                 bookCover[
                                                                     item
@@ -108,6 +110,8 @@ function CartPage() {
                                                             className="img-fluid rounded-start"
                                                             alt="..."
                                                         />
+                                                     </Link>
+
                                                     </div>
 
                                                     <div className="col-md-7">
