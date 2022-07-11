@@ -68,7 +68,7 @@ function Products() {
         tempAlert('Successful Adding!', 1000);
         setTimeout(function(){
             window.location.reload();
-         }, 1000);
+         }, 100);
     };
 
     return (

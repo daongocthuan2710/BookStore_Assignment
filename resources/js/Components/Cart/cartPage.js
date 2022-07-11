@@ -9,49 +9,61 @@ function CartPage() {
     const [cart, setCart] = useState(
         JSON.parse(localStorage.getItem("cart")) || []
     );
-    console.log("cart", cart);
     var totalPrice = 0;
+    var totalItem = 0;
+    let cartTotals = JSON.parse(localStorage.getItem("cart")) || [];
+    cartTotals.map((item) => {
+        totalItem++;
+     });
 
     const handleIncrement = (e) => {
-        console.log(e);
-        let currentVal = Number.parseInt(e.target.form[1].value);
-        console.log('currentVal',currentVal);
-        if (!isNaN(currentVal) && currentVal >= 0) {
-            if (currentVal < 8) {
-                e.target.form[1].value = currentVal + 1;
+        const bookId = e.target.id;
+        const book = cart.find(b => b.id == bookId);
+        if (!isNaN(book.quantity) && book.quantity >= 0) {
+            if (book.quantity < 8) {
                 const cartTmp = cart.map((item) =>
-                    item.id === e.target.id ? { ...item, quantity: item.quantity + 1 } : item
+                    item.id == e.target.id ? { ...item, quantity: item.quantity + 1 } : item
                 );
-                console.log("cartItem",cartTmp);
                 localStorage.setItem("cart", JSON.stringify(cartTmp));
                 setCart(cartTmp);
-            } else {
-                e.target.form[1].value = 8;
             }
-        } else {
-            e.target.form[1].value = 0;
-        }
+        } 
     };
 
     const handleDecrement = (e) => {
-        console.log(e);
-        console.log("Id",e.target.id);
         let currentVal = Number.parseInt(e.target.form[1].value);
-        if (!isNaN(currentVal) && currentVal > 0) {
+        if (!isNaN(currentVal) && currentVal > 1) {
             e.target.form[1].value = currentVal - 1;
             console.log(e.target.form[1].value);
             const cartTmp = cart.map((item) =>
-                item.id === e.target.id
+                item.id == e.target.id
                     ? { ...item, quantity: item.quantity - 1 }
                     : item
             );
-            console.log("Cardtmp", cartTmp);
             localStorage.setItem("cart", JSON.stringify(cartTmp));
             setCart(cartTmp);
         } else {
-            e.target.form[1].value = 0;
+            // e.target.form[1].value = 0;
+            console.log('cart',cart);
+            let index = 0;
+            //   let cartTotals = JSON.parse(localStorage.getItem("cart")) || [];
+            cart.map((item, i) =>
+            {if(item.id == e.target.id){
+                index = i;
+            }}
+            );
+            
+            console.log('index',index);
+            cart.splice(index, 1);
+            console.log('cart',cart);
+            localStorage.setItem("cart", JSON.stringify(cart));
+            setCart(cart);
+            setTimeout(function(){
+                window.location.reload();
+             }, 100);
+
+            
         }
-        console.log("eee",e.target.form[1].value);
     };
 
     return (
@@ -166,7 +178,7 @@ function CartPage() {
                                             $
                                             {parseFloat(
                                                 item.final_price * item.quantity
-                                            ).toFixed(1)}
+                                            ).toFixed(2)}
                                         </td>
                                     </tr>
                                 ))}
@@ -186,7 +198,7 @@ function CartPage() {
                                 className="mb-3 text-center fs-3"
                             >
                                 <Form.Label className="mb-3 fs-4 fw-bold">
-                                    ${parseFloat(totalPrice).toFixed(1)}
+                                    ${parseFloat(totalPrice).toFixed(2)}
                                 </Form.Label>
                             </Form.Group>
                             <Form.Group className="text-center">
