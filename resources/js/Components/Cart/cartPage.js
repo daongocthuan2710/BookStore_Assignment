@@ -67,7 +67,7 @@ function CartPage() {
     const checkUser = () => {
         const user = JSON.parse(localStorage.getItem("user")) || undefined;
         if(user){
-
+           alert("Add Items to DB");
         }
         else{
             navigate("/loginPage");

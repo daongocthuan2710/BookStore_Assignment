@@ -15,7 +15,11 @@ function Login() {
           .then(function (response) {
             if(response.data.length > 0){
                 localStorage.setItem("user", JSON.stringify(response.data[0]));
+                setTimeout(function(){
+                    window.location.reload();
+                 }, 100);
                 navigate("/homePage");
+                
             }
             else{
                 alert('Login failed!');
