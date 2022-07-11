@@ -3,6 +3,12 @@ import { Link } from "react-router-dom";
 import LogoApp from "../../../assets/bookworm_icon.svg";
 
 function NavbarComp() {
+    var totalItem = 0;
+    let cartTotals = JSON.parse(localStorage.getItem("cart")) || [];
+    cartTotals.map((item) => {
+        totalItem++;
+     }
+);
     return (
         <>
             <Navbar
@@ -43,7 +49,7 @@ function NavbarComp() {
                                 About
                             </Link>
                             <Link to="/cartPage" className="nav-link">
-                                Cart
+                                Cart ({totalItem})
                             </Link>
 
                             <NavDropdown

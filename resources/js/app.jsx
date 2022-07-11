@@ -13,6 +13,7 @@ import Footer from './Components/Footer/Footer';
 import '../css/app.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import CartPage from './Components/Cart/cartPage';
+import Login from './Components/Login/Login';
 
 ReactDOM.render(
     <HashRouter>
@@ -28,6 +29,7 @@ ReactDOM.render(
         </Routes> 
     <Footer/>
     </HashRouter>
+    // <Login/>
   ,document.getElementById('root')
 );
 

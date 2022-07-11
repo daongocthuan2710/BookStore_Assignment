@@ -28,8 +28,7 @@ function FormSubmit(props) {
           })
           .then(function (response) {
             // console.log(response);
-            tempAlert('successful Submited!', 3000,'green')
-            window.location.reload(1);
+            tempAlert('successful Submited!', 3000,'green');
             setTimeout(function(){
                 window.location.reload();
              }, 2000);

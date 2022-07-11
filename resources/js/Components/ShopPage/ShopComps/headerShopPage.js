@@ -3,17 +3,17 @@ import {Col } from "react-bootstrap";
 function HeaderShopPage(props) {
     return (
         <>
-            <Col className="fs-4" xs={2} md={2}>
+            <Col className="fs-4" xs={0} md={2}>
                 
             </Col>
-            <Col className="fs-6" xs={6} md={6}>
+            <Col className="fs-6" xs={12} md={6}>
                 Show {props.currentPage * props.perPage - props.perPage} -{" "}
                 {props.currentPage * props.perPage <= props.totals
                     ? props.currentPage * props.perPage
                     : props.totals}{" "}
                 in {props.totals}
             </Col>
-            <Col xs={2} md={2}>
+            <Col xs={12} md={2}>
                 <select
                     onChange={props.onChangeSort}
                     defaultValue="onSale"
@@ -30,7 +30,7 @@ function HeaderShopPage(props) {
                     </option>
                 </select>
             </Col>
-            <Col xs={2} md={2}>
+            <Col xs={12} md={2}>
                 <select
                     onChange={props.onChangShowPage}
                     defaultValue="15"

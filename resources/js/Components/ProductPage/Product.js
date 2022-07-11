@@ -9,12 +9,14 @@ import FormAddToCart from "./ProductComps/FormAddToCart";
 function Products() {
     let bookId = Number.parseInt(window.location.hash.split("/").at(-1));
     const [books, setBooks] = useState([]);
-
+    const [loading, setLoading] = useState(false);
     // Lấy dữ liệu book được truyền vào
     useEffect(() => {
+        setLoading(true);
         axios
             .get(`./api/books?book_id=${bookId}`)
             .then((res) => {
+                setLoading(false);
                 const datas = res.data.data;
                 setBooks(datas[0]);
             })
@@ -63,7 +65,10 @@ function Products() {
         }
         localStorage.setItem("cart", JSON.stringify(preLocalStorageArray));
 
-        return tempAlert('Successful Adding!', 1000);
+        tempAlert('Successful Adding!', 1000);
+        setTimeout(function(){
+            window.location.reload();
+         }, 1000);
     };
 
     return (
@@ -81,7 +86,7 @@ function Products() {
                         <BookInfo books={books} book_id={bookId} />
                     </Col>
                     <Col md={4}>
-                        <FormAddToCart books={books} addToCart={addToCart} />
+                        <FormAddToCart books={books} addToCart={addToCart} loading = {loading} />
                     </Col>
                 </Row>
 

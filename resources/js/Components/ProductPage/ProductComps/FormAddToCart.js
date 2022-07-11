@@ -95,6 +95,7 @@ function FormAddToCart(props) {
                 <Button
                     style={{ width: "100%" }}
                     variant="primary"
+                    disabled = {props.loading}
                     type="submit"
                     onClick = {props.addToCart}
                 >

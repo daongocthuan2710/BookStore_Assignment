@@ -3,23 +3,26 @@ import { Row, Col, Container } from "react-bootstrap";
 import { Form, Button } from "react-bootstrap";
 import { bookCover } from "../../datas/bookCover";
 
+
 function CartPage() {
+    var totalItem = 0;
     const [cart, setCart] = useState(
         JSON.parse(localStorage.getItem("cart")) || []
     );
-
     console.log("cart", cart);
     var totalPrice = 0;
 
     const handleIncrement = (e) => {
         console.log(e);
         let currentVal = Number.parseInt(e.target.form[1].value);
+        console.log('currentVal',currentVal);
         if (!isNaN(currentVal) && currentVal >= 0) {
             if (currentVal < 8) {
                 e.target.form[1].value = currentVal + 1;
                 const cartTmp = cart.map((item) =>
-                    item.id === bookId ? { ...item, quantity: item.quantity + 1 } : item
+                    item.id === e.target.id ? { ...item, quantity: item.quantity + 1 } : item
                 );
+                console.log("cartItem",cartTmp);
                 localStorage.setItem("cart", JSON.stringify(cartTmp));
                 setCart(cartTmp);
             } else {
@@ -42,7 +45,6 @@ function CartPage() {
                     ? { ...item, quantity: item.quantity - 1 }
                     : item
             );
-            // console.log("CardtmpId", cartTmp[e.target.id]);
             console.log("Cardtmp", cartTmp);
             localStorage.setItem("cart", JSON.stringify(cartTmp));
             setCart(cartTmp);
@@ -56,7 +58,7 @@ function CartPage() {
         <>
             <Container style={{ paddingTop: "100px" }}>
                 <Row className=" fs-3 mb-5">
-                    <Col md={12}>Your cart: 3 items</Col>
+                    <Col md={12}>Your cart: {totalItem} items</Col>
                     <Col md={12}>
                         <hr></hr>
                     </Col>
@@ -75,6 +77,7 @@ function CartPage() {
                             </thead>
                             <tbody>
                                 {cart.map((item, index) => (
+                                    
                                     <tr key={index}>
                                         <th scope="row">
                                             <div
@@ -156,10 +159,8 @@ function CartPage() {
                                             </Form>
                                         </td>
                                         {(() => {
-                                            totalPrice =
-                                                totalPrice +
-                                                item.final_price *
-                                                    item.quantity;
+                                            totalPrice =totalPrice + item.final_price * item.quantity;
+                                            totalItem++;
                                         })()}
                                         <td>
                                             $
@@ -204,5 +205,6 @@ function CartPage() {
         </>
     );
 }
-
+  
 export default CartPage;
+
