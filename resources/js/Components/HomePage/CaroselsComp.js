@@ -16,7 +16,7 @@ function ControlledCarousel() {
 
     useEffect(() => {
         axios
-        .get(`http://127.0.0.1:8000/api/books?getTopBooks=10`)
+        .get(`./api/books?getTopBooks=10`)
         .then((res) => {
             const datas = res.data.data;
             setBooks(datas);
