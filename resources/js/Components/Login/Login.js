@@ -11,7 +11,7 @@ function Login() {
 
     const handleSubmitLogin = (e) => {
         e.preventDefault();
-        axios.get(`http://127.0.0.1:8000/api/users?email=${email}&password=${pass}`)
+        axios.get(`./api/users?email=${email}&password=${pass}`)
           .then(function (response) {
             if(response.data.length > 0){
                 localStorage.setItem("user", JSON.stringify(response.data[0]));

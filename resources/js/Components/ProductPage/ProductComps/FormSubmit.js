@@ -20,7 +20,7 @@ function FormSubmit(props) {
     }
 
     const handleSubmitReview = () => {
-        axios.post('http://127.0.0.1:8000/api/reviews', {
+        axios.post('./api/reviews', {
             book_id: props.bookId,
             review_title: title,
             rating_start: rating,

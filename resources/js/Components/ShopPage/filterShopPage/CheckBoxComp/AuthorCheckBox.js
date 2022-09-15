@@ -5,7 +5,7 @@ export default function AuthorCheckboxs(props) {
     const [authors, setAuthors] = React.useState([]);
     useEffect(() => {
         axios
-            .get("http://127.0.0.1:8000/api/authors")
+            .get("./api/authors")
             .then((res) => {
                 const datas = res.data;
                 setAuthors(datas);
