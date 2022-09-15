@@ -22,7 +22,7 @@ function ShopPage() {
     const onChangeSort = (event) => {
         setSorts(event.target.value);
     };
-    console.log("reload");
+    
     const onChangeCategory = (event) => {
         if (event.target.checked == true) {
             setCategorys(categorys + "," + event.target.value);
